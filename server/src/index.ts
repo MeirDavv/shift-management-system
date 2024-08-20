@@ -5,7 +5,10 @@ import cookieParser from 'cookie-parser';
 import employeeRouter from './routes/employeeRoutes'
 
 const app = express();
-app.use(cors())
+app.use(cors({
+    credentials:true,
+    origin: ["http://localhost:5173","http://localhost:3001"]
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());

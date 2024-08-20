@@ -24,17 +24,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const employeeModel_1 = __importDefault(require("../models/employeeModel"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const tokenModel_1 = __importDefault(require("../models/tokenModel"));
+const utils_1 = require("./utils");
 dotenv_1.default.config();
-const isPasswordMatch = (loginPassword, userPassword) => {
-    return bcrypt_1.default.compare(loginPassword, userPassword);
-};
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.body;
     try {
+        // Destructure the necessary fields from req.body
+        const { first_name, last_name, email, password } = req.body;
+        // Hash the plain text password
+        const password_hash = yield (0, utils_1.hashPassword)(password);
+        // Create a user object that matches the Employee interface
+        const user = {
+            first_name,
+            last_name,
+            email,
+            password_hash
+        };
         const userInfo = yield employeeModel_1.default.create(user);
         res.status(201).json({
             message: "User registered successfully",
@@ -57,7 +64,10 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!user) {
             return res.status(404).json({ message: "User not found..." });
         }
-        const passwordMatch = yield isPasswordMatch(password, user.password_hash);
+        if (!user.id) {
+            throw new Error("User doesn't have an id");
+        }
+        const passwordMatch = yield (0, utils_1.isPasswordMatch)(password, user.password_hash);
         if (!passwordMatch) {
             return res.status(401).json({ message: "Authentication failed..." });
         }
@@ -95,7 +105,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             maxAge: 3 * 24 * 60 * 60 * 1000 //3 days
         });
         yield tokenModel_1.default.updateRefreshToken(refreshToken, user.id);
-        const { password_hash } = user, userWithoutPasword = __rest(user, ["password_hash"]); //destructure to remove the pasword from the response
+        const { password_hash: _ } = user, userWithoutPasword = __rest(user, ["password_hash"]); //destructure to remove the pasword from the response
         res.json({
             message: "Login sucessfully",
             user: userWithoutPasword,

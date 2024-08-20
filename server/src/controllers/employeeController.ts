@@ -5,18 +5,27 @@ import { Request,Response } from "express";
 import dotenv from "dotenv";
 import { Employee } from "../types/Employee";
 import tokenModel from "../models/tokenModel";
-
+import { hashPassword, isPasswordMatch } from "./utils";
 
 dotenv.config();
 
-const isPasswordMatch = (loginPassword:string, userPassword:string ):Promise<boolean> => {
-    return bcrypt.compare(loginPassword,userPassword);
-}
-
 const registerUser= async (req:Request,res:Response): Promise<void> => {
-    const user : Employee = req.body;
-
     try{
+        
+    // Destructure the necessary fields from req.body
+    const { first_name, last_name, email, password } = req.body;
+
+    // Hash the plain text password
+    const password_hash = await hashPassword(password);
+    
+    // Create a user object that matches the Employee interface
+    const user:Employee = {
+        first_name,
+        last_name,
+        email,
+        password_hash
+    }
+    
     const userInfo = await employeeModel.create(user);
     res.status(201).json({
         message:"User registered successfully",
@@ -40,8 +49,14 @@ const loginUser= async (req:Request, res:Response) => {
     try{
         const user : Employee | null = await employeeModel.getByEmail(email);
 
+
         if(!user){
             return res.status(404).json({message:"User not found..."})
+        }
+
+
+        if (!user.id){
+            throw new Error("User doesn't have an id")
         }
 
         const passwordMatch = await isPasswordMatch(password, user.password_hash);
@@ -98,9 +113,10 @@ const loginUser= async (req:Request, res:Response) => {
             maxAge: 3 * 24 * 60 * 60 * 1000 //3 days
         });
 
+
         await tokenModel.updateRefreshToken(refreshToken, user.id);
 
-        const {password_hash, ...userWithoutPasword} = user; //destructure to remove the pasword from the response
+        const {password_hash:_, ...userWithoutPasword} = user; //destructure to remove the pasword from the response
 
         res.json({
             message: "Login sucessfully",

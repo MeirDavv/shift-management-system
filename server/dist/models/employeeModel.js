@@ -8,24 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../config/db");
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const TABLE_NAME = 'employees';
-const hashPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
-    return bcrypt_1.default.hash(password, 10);
-});
 const create = (employeeInfo) => __awaiter(void 0, void 0, void 0, function* () {
     const { first_name, last_name, email, password_hash } = employeeInfo;
+    console.log(password_hash);
     const trx = yield db_1.db.transaction(); //using transaction so that if we fail to insert it will rollback
     try {
         //Hash the password
-        const hashedPassword = yield hashPassword(password_hash);
         const [employee] = yield trx(TABLE_NAME)
-            .insert({ first_name, last_name, email, password_hash: hashedPassword }, ['email', 'first_name', 'last_name']);
+            .insert({ first_name, last_name, email, password_hash }, ['email', 'first_name', 'last_name']);
         yield trx.commit();
         return employee;
     }

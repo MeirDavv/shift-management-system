@@ -4,20 +4,18 @@ import { Employee } from '../types/Employee';
 
 const TABLE_NAME:string = 'employees'
 
-const hashPassword = async(password:string):Promise<string> =>{
-    return bcrypt.hash(password,10)
-}
+
 
 const create = async (employeeInfo:Employee):Promise<Partial<Employee>> =>{
     const {first_name, last_name, email, password_hash } = employeeInfo;
 
+    console.log(password_hash);
     const trx = await db.transaction(); //using transaction so that if we fail to insert it will rollback
 
     try{
         //Hash the password
-        const hashedPassword:string = await hashPassword(password_hash);
         const [employee] = await trx(TABLE_NAME)
-        .insert({first_name,last_name,email,password_hash:hashedPassword},
+        .insert({first_name,last_name,email,password_hash},
             ['email','first_name','last_name']
         );
         await trx.commit();
