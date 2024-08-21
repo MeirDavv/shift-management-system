@@ -118,4 +118,13 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: "internal server error" });
     }
 });
-exports.default = { registerUser, loginUser };
+const logoutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = {
+        httpOnly: true,
+        //secure:
+        maxAge: 0, //delete immediately
+    };
+    res.cookie('token', 'expiredToken', options);
+    res.status(200).json({ status: "success" });
+});
+exports.default = { registerUser, loginUser, logoutUser };

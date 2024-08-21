@@ -130,7 +130,15 @@ const loginUser= async (req:Request, res:Response) => {
     }
 }
 
+const logoutUser = async (req:Request,res:Response) => {
+    const options = {
+        httpOnly: true,
+        //secure:
+        maxAge: 0, //delete immediately
+    }
+    res.cookie('token','expiredToken', options);
+    res.status(200).json({status: "success"});
+}
 
 
-
-export default {registerUser,loginUser};
+export default {registerUser,loginUser, logoutUser};

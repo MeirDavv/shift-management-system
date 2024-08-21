@@ -9,6 +9,7 @@ const verifyToken_1 = __importDefault(require("../middlewares/verifyToken"));
 const router = express_1.default.Router();
 router.post("/register", employeeController_1.default.registerUser);
 router.post("/login", employeeController_1.default.loginUser);
+router.get("/logout", employeeController_1.default.logoutUser);
 router.get("/auth", verifyToken_1.default, (req, res) => {
     res.sendStatus(200);
 });

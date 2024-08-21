@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post("/register", employeeController.registerUser);
 router.post("/login", employeeController.loginUser);
+router.get("/logout", employeeController.logoutUser);
+
 
 router.get("/auth", verifyToken, (req:Request, res:Response)=>{
     res.sendStatus(200);

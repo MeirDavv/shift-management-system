@@ -1,7 +1,13 @@
-import React from 'react'
+import React from "react";
+import { Logout } from "./Logout";
 
 export const Dashboard = () => {
+
   return (
-    <div>Dashboard</div>
-  )
-}
+    <div>
+        <nav className="sideNav">
+            <Logout></Logout>
+        </nav>
+    </div>
+  );
+};

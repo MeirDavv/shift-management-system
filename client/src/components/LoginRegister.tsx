@@ -32,8 +32,11 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
 
       if (response.status === 201 || response.status === 200) {
         setMessage(response.data.message);
-        console.log(response.data);
+
+        console.log(title);
+
         if (title === "Login") {
+          console.log("nabigating to dashboard");
           navigate("/dashboard");
         } else {
           navigate("/login");
