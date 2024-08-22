@@ -140,5 +140,14 @@ const logoutUser = async (req:Request,res:Response) => {
     res.status(200).json({status: "success"});
 }
 
+const authUser = async (req:Request, res:Response) => {
+    res.status(200).json({
+        email: req.email,
+        userid: req.userid,
+        first_name: req.first_name,
+        last_name: req.last_name,
+        role_id: req.role_id
+    });
+};
 
-export default {registerUser,loginUser, logoutUser};
+export default {registerUser,loginUser, logoutUser, authUser};

@@ -3,7 +3,9 @@ import { AuthState } from "../interfaces/auth";
 
 const initialState: AuthState = {
     isAuthenticated: false,
-    user: null,
+    email: null,
+    loading: false,
+    message: "",
 };
 
 const authSlice = createSlice({
@@ -12,14 +14,23 @@ const authSlice = createSlice({
     reducers:{
         login(state, action: PayloadAction<string>){
             state.isAuthenticated = true;
-            state.user = action.payload
+            state.email = action.payload;
+            state.loading = false;
+            state.message = "Login successful"
         },
         logout(state){
             state.isAuthenticated = false;
-            state.user = null;
+            state.email = null;
+            state.message = "Logout successful"
         },
+        setLoading(state, action:PayloadAction<boolean>){
+            state.loading = action.payload;
+        },
+        setMessage(state, action:PayloadAction<string>){
+            state.message = action.payload;
+        }
     },
 });
 
-export const {login, logout} = authSlice.actions;
+export const {login, logout, setLoading, setMessage} = authSlice.actions;
 export default authSlice.reducer;

@@ -127,4 +127,13 @@ const logoutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     res.cookie('token', 'expiredToken', options);
     res.status(200).json({ status: "success" });
 });
-exports.default = { registerUser, loginUser, logoutUser };
+const authUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(200).json({
+        email: req.email,
+        userid: req.userid,
+        first_name: req.first_name,
+        last_name: req.last_name,
+        role_id: req.role_id
+    });
+});
+exports.default = { registerUser, loginUser, logoutUser, authUser };
