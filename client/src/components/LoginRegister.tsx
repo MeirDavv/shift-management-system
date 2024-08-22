@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LoginRegisterProps } from "../types/LoginRegister";
+import { LoginRegisterProps } from "../interfaces/LoginRegister";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { login } from "../store/slices/authSlice";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -9,9 +12,10 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
   const [first_name, setFirst_name] = useState<string>("");
   const [last_name, setLast_name] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [password, setpassword] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLoginRegister = async (event: React.FormEvent) => {
@@ -36,7 +40,7 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
         console.log(title);
 
         if (title === "Login") {
-          console.log("nabigating to dashboard");
+          dispatch(login(email));
           navigate("/dashboard");
         } else {
           navigate("/login");
@@ -81,7 +85,7 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
           type="password"
           id="password"
           placeholder="password"
-          onChange={(e) => setpassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <input type="submit" id="submit" value={title} />
       </form>

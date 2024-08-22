@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { LoginRegister } from "./components/LoginRegister";
 import { Dashboard } from "./components/dashboardComponents/layout/Dashboard";
@@ -8,7 +8,6 @@ import Unauthorized from "./components/Unauthorized";
 
 export const App = () => {
   return (
-    <Router>
       <Routes>
         {/* Public Routes */}
         <Route
@@ -32,6 +31,15 @@ export const App = () => {
         {/* Unauthorized routes */}
         <Route path="/unauthorized" element={<Unauthorized></Unauthorized>} />
       </Routes>
-    </Router>
   );
 };
+
+
+const protectedRoute = ({children, role}) =>{
+
+  const role_from_jwt = "admin";
+  if(role_from_jwt===role){
+    return <>{children}</>
+  }
+
+}
