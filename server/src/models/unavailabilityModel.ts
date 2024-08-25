@@ -17,6 +17,7 @@ const getByEmployeeId = async (employee_id:number): Promise<Unavailability[]> =>
 
 const submitUnavailability = async (update:Unavailability, employee_id: number ): Promise<void> => {
     try{
+        
         await db(TABLE_NAME)
         .insert({
             employee_id,

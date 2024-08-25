@@ -1,56 +1,66 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from '../../../store';
-import { fetchShifts } from "../../../store/actions/shiftActions";
+import { fetchUnavailability,submitUnavailability } from "../../../store/actions/availabilityActions";
+import { updateUnavailability } from "../../../store/slices/unavailabilitySlice";
 
-
-const ShiftsPage = () => {
+const AvailabilityPage = () => {
   const dispatch:AppDispatch = useDispatch();
-  const {list : listShifts} = useSelector((state:any)=>state.shifts)
+  const {unavailability, loading, error} = useSelector((state:RootState)=>state.unavailability);
+  console.log("unavailability: ",unavailability);
 
-  
-  useEffect(() => {
-    dispatch(fetchShifts());
-}, [dispatch]);
+  useEffect(()=>{
+    dispatch(fetchUnavailability());
+  }, [dispatch]);
 
+
+
+  const handleCheckboxChange = (shift_id: number, day_id:number)=>{
+    const is_unavailable = !unavailability[`${shift_id}-${day_id}`];
+    dispatch(updateUnavailability({shift_id, day_id, is_unavailable}));
+  };
+
+  const handleSubmit = () => {
+    console.log("Submitting state: ", unavailability);
+    dispatch(submitUnavailability());
+  }
   
   const days = ['Sunday', 'Monday','Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const shifts = ['Morning', 'Evening', 'Night'];
-  const board = new Array(shifts.length+1);
-  // Initialize the two-dimensional array
-  for(let i = 0; i < shifts.length + 1; i++) {
-    board[i] = new Array(days.length + 1);
-  }
 
-  // Set the top left corner to empty
-  board[0][0] = '';
-  
-  // Set the first row with shift headers
-  for(let i = 0; i < shifts.length; i++) {
-    board[i + 1][0] = shifts[i]; // Horizontal headers
-  }
-  
-  // Set the first column with day headers
-  for(let j = 0; j < days.length; j++) {
-    board[0][j + 1] = days[j]; // Vertical headers
-  }
-
- 
-
-  return (
+  return(
     <section>
       <h2>Availability</h2>
-      {
-        board.map((row,i) =>(
-          <tr key = {i}>
-            {row.map((cell: string | null,j:number)=>(
-              <td key={j}>{cell}</td>
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            {days.map((day,index)=>(
+              <th key={index}>{day}</th>
             ))}
           </tr>
-        ))
-      }
+        </thead>
+        <tbody>
+          {shifts.map((shift,shiftIndex) => (
+            <tr key={shiftIndex}>
+              <td>{shift}</td>
+              {days.map((day, dayIndex)=>{
+                const key = `${shiftIndex+1}-${dayIndex+1}`;
+                return (
+                  <td key={dayIndex}>
+                    <input type="checkbox" checked = {!!unavailability[key]} onChange={()=> handleCheckboxChange(shiftIndex + 1,dayIndex +1)}/>
+                  </td>
+                )
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button onClick={handleSubmit}>Submit Changes</button>
     </section>
-  )
+  );
 };
 
-export default ShiftsPage;
+export default AvailabilityPage;

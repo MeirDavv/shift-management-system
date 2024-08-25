@@ -8,7 +8,7 @@ import { Employee, EmployeeMap } from "../../../store/interfaces/employee";
 
 const ShiftsPage = () => {
   const dispatch:AppDispatch = useDispatch();
-  const {list : listShifts} = useSelector((state:any)=>state.shifts)
+  const {list : listShifts} = useSelector((state:RootState)=>state.shifts)
   const {list : listEmployeesNames} = useSelector((state:any)=>state.employees)
 
   const employeeObject: EmployeeMap = listEmployeesNames.reduce((acc: EmployeeMap[], employee:Employee) => {
