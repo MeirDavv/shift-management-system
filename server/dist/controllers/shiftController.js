@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getShifts = void 0;
 const shiftModel_1 = __importDefault(require("../models/shiftModel"));
 const getShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,4 +23,4 @@ const getShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-exports.getShifts = getShifts;
+exports.default = { getShifts };

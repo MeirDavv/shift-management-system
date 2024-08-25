@@ -1,8 +1,8 @@
 import express from 'express';
-import {getShifts} from '../controllers/shiftController';
+import shiftController from '../controllers/shiftController';
 
 const router = express.Router();
 
-router.get('/shifts', getShifts);
+router.get('/shifts', shiftController.getShifts);
 
 export default router;

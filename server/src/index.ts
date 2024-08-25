@@ -4,6 +4,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import employeeRouter from './routes/employeeRoutes';
 import shiftRouter from './routes/shiftRoutes';
+import unavailabilityRouter from './routes/unavailabilityRouter';
 
 const app = express();
 app.use(cors({
@@ -21,6 +22,7 @@ app.listen(PORT, () => {
 
 app.use("/user",employeeRouter);
 app.use("/",shiftRouter);
+app.use("/",unavailabilityRouter);
 
 app.get("/api/:name",(req:Request,res:Response)=>{
     res.json({message: `Hello ${req.params.name}, from server!`});
