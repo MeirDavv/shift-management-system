@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from './slices/authSlice';
 import employeeReducer from './slices/employeeSlice';
-import scheduleReducer from './slices/scheduleSlice';
+import shiftReducer from './slices/shiftSlice';
 
 const store = configureStore({
     reducer:{
         auth: authReducer,
         employees: employeeReducer,
-        schedule: scheduleReducer
+        shifts: shiftReducer
     },
 });
 

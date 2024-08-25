@@ -2,15 +2,23 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from '../../../store';
 import { fetchShifts } from "../../../store/actions/shiftActions";
+import { fetchEmployeesNames } from "../../../store/actions/employeeActions";
+import { Employee, EmployeeMap } from "../../../store/interfaces/employee";
 
 
 const ShiftsPage = () => {
   const dispatch:AppDispatch = useDispatch();
   const {list : listShifts} = useSelector((state:any)=>state.shifts)
+  const {list : listEmployeesNames} = useSelector((state:any)=>state.employees)
 
+  const employeeObject: EmployeeMap = listEmployeesNames.reduce((acc: EmployeeMap[], employee:Employee) => {
+    acc[employee.id] = `${employee.first_name} ${employee.last_name}`;
+    return acc;
+  }, {});
   
   useEffect(() => {
     dispatch(fetchShifts());
+    dispatch(fetchEmployeesNames());
 }, [dispatch]);
 
   
@@ -35,11 +43,14 @@ const ShiftsPage = () => {
     board[0][j + 1] = days[j]; // Vertical headers
   }
 
- 
+  // Populate the contents of the table
+  for (const item of listShifts){
+    board[item.shift_id][item.day_id] = employeeObject[item.employee_id];
+  }
 
   return (
     <section>
-      <h2>Availability</h2>
+      <h2>Shifts</h2>
       {
         board.map((row,i) =>(
           <tr key = {i}>

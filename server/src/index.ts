@@ -2,7 +2,8 @@ import express, { Request,Response } from "express";
 import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import employeeRouter from './routes/employeeRoutes'
+import employeeRouter from './routes/employeeRoutes';
+import shiftRouter from './routes/shiftRoutes';
 
 const app = express();
 app.use(cors({
@@ -19,6 +20,7 @@ app.listen(PORT, () => {
 })
 
 app.use("/user",employeeRouter);
+app.use("/",shiftRouter);
 
 app.get("/api/:name",(req:Request,res:Response)=>{
     res.json({message: `Hello ${req.params.name}, from server!`});

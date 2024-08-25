@@ -3,11 +3,21 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Request,Response } from "express";
 import dotenv from "dotenv";
-import { Employee } from "../types/Employee";
+import { Employee, EmployeeIdAndName } from "../types/Employee";
 import tokenModel from "../models/tokenModel";
 import { hashPassword, isPasswordMatch } from "./utils";
 
 dotenv.config();
+
+const getAllUsersNames = async (req:Request,res:Response): Promise<void> => {
+    try{
+        const users : EmployeeIdAndName[] | null = await employeeModel.getAllNames(); 
+        res.status(200).json(users);
+    } catch(error){
+        console.error(error);
+        throw error;
+    }
+}
 
 const registerUser= async (req:Request,res:Response): Promise<void> => {
     try{
@@ -150,4 +160,4 @@ const authUser = async (req:Request, res:Response) => {
     });
 };
 
-export default {registerUser,loginUser, logoutUser, authUser};
+export default {getAllUsersNames, registerUser,loginUser, logoutUser, authUser};

@@ -1,6 +1,6 @@
 import {db} from '../config/db';
 import bcrypt from 'bcrypt';
-import { Employee } from '../types/Employee';
+import { Employee, EmployeeIdAndName } from '../types/Employee';
 
 const TABLE_NAME:string = 'employees'
 
@@ -28,10 +28,10 @@ const create = async (employeeInfo:Employee):Promise<Partial<Employee>> =>{
     }
 }
 
-const getAll = async (): Promise<Employee[]> => {
+const getAllNames = async (): Promise<EmployeeIdAndName[]> => {
     try{
-        const employees:Employee[] = await db(TABLE_NAME)
-        .select("id","first_name","last_name","email","password_hash","role_id");
+        const employees:EmployeeIdAndName[] = await db(TABLE_NAME)
+        .select("id","first_name","last_name","role_id");
         return employees;  
     } catch(error){
         console.error(error);
@@ -120,4 +120,4 @@ const deleteEmployee = async (id:number):Promise<Employee | null> => {
     }
 }
 
-export default {create, getAll,getById,getByEmail,update,deleteEmployee}
+export default {create, getAllNames,getById,getByEmail,update,deleteEmployee}

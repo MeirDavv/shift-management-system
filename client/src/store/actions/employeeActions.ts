@@ -2,16 +2,17 @@ import {AppDispatch} from '../index';
 import { setEmployees } from '../slices/employeeSlice';
 import { Employee } from '../interfaces/employee';
 import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
-export const fetchEmployees = () => async (dispatch:AppDispatch) => {
+export const fetchEmployeesNames = createAsyncThunk('employees/fetchEmployeesNames', async () => {
     try{
-        const response = await axios.get(`${API_URL}/schedule`, { withCredentials: true });
-        const data: Employee[] = await response.data;
-        dispatch(setEmployees(data));
-    } catch(error){
-        console.error("Error fetching employees:", error);
+        const response = await axios.get(`${API_URL}/user/all/names`);
+        console.log("response.data: ", response.data);
+        return response.data;
+    } catch (error){
+        console.error(error);
+        throw error;
     }
-
-};
+});

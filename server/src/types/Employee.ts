@@ -7,3 +7,9 @@ export interface Employee {
     role_id?:number
 }
 
+export interface EmployeeIdAndName {
+    id: number,
+    first_name: string,
+    last_name: string,
+    role_id?:number
+}

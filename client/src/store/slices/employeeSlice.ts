@@ -1,8 +1,12 @@
 import {createSlice,PayloadAction} from '@reduxjs/toolkit';
 import { Employee, EmployeesState } from '../interfaces/employee';
+import { fetchEmployeesNames } from '../actions/employeeActions';
+
 
 const initialState: EmployeesState = {
     list: [],
+    loading: false,
+    error: null
 };
 
 const employeesSlice = createSlice({
@@ -25,6 +29,19 @@ const employeesSlice = createSlice({
             state.list = state.list.filter(emp => emp.id !== action.payload);
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(fetchEmployeesNames.pending,(state)=>{
+            state.loading = true;
+        });
+        builder.addCase(fetchEmployeesNames.fulfilled, (state,action)=>{
+            state.list = action.payload;
+            state.loading = false;
+        });
+        builder.addCase(fetchEmployeesNames.rejected, (state,action) => {
+            state.loading = false;
+            state.error = action.error.message || 'Failed to fetch employees';
+        })
+    }
 });
 
 export const {setEmployees,addEmployee,updateEmployee,removeEmployee} = employeesSlice.actions;

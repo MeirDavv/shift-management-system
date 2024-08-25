@@ -8,13 +8,13 @@ const EmployeesPage = () => {
   return (
     <section>
       <h2>Employees</h2>
-      <ul>
+      {/* <ul>
         {employees.map((employee)=>(
           <li key={employee.id}>
             {employee.name} - {employee.role}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </section>
 
   )

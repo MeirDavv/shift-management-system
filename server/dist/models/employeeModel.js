@@ -28,10 +28,10 @@ const create = (employeeInfo) => __awaiter(void 0, void 0, void 0, function* () 
         throw error;
     }
 });
-const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllNames = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const employees = yield (0, db_1.db)(TABLE_NAME)
-            .select("id", "first_name", "last_name", "email", "password_hash", "role_id");
+            .select("id", "first_name", "last_name", "role_id");
         return employees;
     }
     catch (error) {
@@ -110,4 +110,4 @@ const deleteEmployee = (id) => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-exports.default = { create, getAll, getById, getByEmail, update, deleteEmployee };
+exports.default = { create, getAllNames, getById, getByEmail, update, deleteEmployee };

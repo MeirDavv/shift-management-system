@@ -29,6 +29,16 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const tokenModel_1 = __importDefault(require("../models/tokenModel"));
 const utils_1 = require("./utils");
 dotenv_1.default.config();
+const getAllUsersNames = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield employeeModel_1.default.getAllNames();
+        res.status(200).json(users);
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+});
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Destructure the necessary fields from req.body
@@ -136,4 +146,4 @@ const authUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         role_id: req.role_id
     });
 });
-exports.default = { registerUser, loginUser, logoutUser, authUser };
+exports.default = { getAllUsersNames, registerUser, loginUser, logoutUser, authUser };

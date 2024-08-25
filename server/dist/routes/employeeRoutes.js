@@ -11,6 +11,7 @@ router.post("/register", employeeController_1.default.registerUser);
 router.post("/login", employeeController_1.default.loginUser);
 router.get("/logout", employeeController_1.default.logoutUser);
 router.get("/auth", verifyToken_1.default, employeeController_1.default.authUser);
+router.get("/all/names", employeeController_1.default.getAllUsersNames);
 // Only admin can access these routes
 //router.get("/dashboard/settings" , verifyToken, authorizeRole('admin'), employeeController.adminDashboard);
 exports.default = router;
