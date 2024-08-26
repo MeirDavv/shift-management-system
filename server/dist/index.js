@@ -10,6 +10,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const employeeRoutes_1 = __importDefault(require("./routes/employeeRoutes"));
 const shiftRoutes_1 = __importDefault(require("./routes/shiftRoutes"));
 const unavailabilityRouter_1 = __importDefault(require("./routes/unavailabilityRouter"));
+const tokenRoutes_1 = __importDefault(require("./routes/tokenRoutes"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     credentials: true,
@@ -25,6 +26,7 @@ app.listen(PORT, () => {
 app.use("/user", employeeRoutes_1.default);
 app.use("/", shiftRoutes_1.default);
 app.use("/", unavailabilityRouter_1.default);
+app.use("/", tokenRoutes_1.default);
 app.get("/api/:name", (req, res) => {
     res.json({ message: `Hello ${req.params.name}, from server!` });
 });

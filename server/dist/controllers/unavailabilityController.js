@@ -13,6 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const unavailabilityModel_1 = __importDefault(require("../models/unavailabilityModel"));
+const getAllUnavailableShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const unavailableShifts = yield unavailabilityModel_1.default.getAll();
+        res.status(200).json(unavailableShifts);
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+});
 const getUnavailableShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (req.userid !== undefined) {
@@ -47,4 +57,4 @@ const submitUnavailableShifts = (req, res) => __awaiter(void 0, void 0, void 0, 
         throw error;
     }
 });
-exports.default = { getUnavailableShifts, submitUnavailableShifts };
+exports.default = { getAllUnavailableShifts, getUnavailableShifts, submitUnavailableShifts };

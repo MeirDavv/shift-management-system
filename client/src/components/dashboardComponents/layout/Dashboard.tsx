@@ -9,14 +9,12 @@ import Navbar from "../Navbar";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store";
 import { fetchEmployeesNames} from "../../../store/actions/employeeActions";
-import { fetchSchedule } from "../../../store/actions/scheduleActions";
 
 export const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(()=>{
     dispatch(fetchEmployeesNames());
-    dispatch(fetchSchedule());
 
   },[dispatch])
   return (

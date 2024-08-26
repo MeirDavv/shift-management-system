@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const unavailabilityController_1 = __importDefault(require("../controllers/unavailabilityController"));
 const verifyToken_1 = __importDefault(require("../middlewares/verifyToken"));
 const router = express_1.default.Router();
+router.get('/unavailability/all', verifyToken_1.default, unavailabilityController_1.default.getAllUnavailableShifts);
 router.get('/unavailability', verifyToken_1.default, unavailabilityController_1.default.getUnavailableShifts);
 router.post('/unavailability', verifyToken_1.default, unavailabilityController_1.default.submitUnavailableShifts);
 exports.default = router;

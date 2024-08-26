@@ -5,6 +5,7 @@ import verifyToken from '../middlewares/verifyToken';
 
 const router = express.Router();
 
+router.get('/unavailability/all', verifyToken, unavailabilityController.getAllUnavailableShifts);
 router.get('/unavailability', verifyToken, unavailabilityController.getUnavailableShifts);
 router.post('/unavailability', verifyToken, unavailabilityController.submitUnavailableShifts)
 

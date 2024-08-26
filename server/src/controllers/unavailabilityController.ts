@@ -2,6 +2,16 @@ import { Request, Response } from "express";
 import unavailabilityModel from '../models/unavailabilityModel';
 import { Unavailability } from "../types/Unavailability";
 
+const getAllUnavailableShifts = async (req:Request, res:Response) => {
+    try{
+        const unavailableShifts = await unavailabilityModel.getAll();
+        res.status(200).json(unavailableShifts);
+    } catch(error){
+        console.error(error);
+        throw error;
+    }
+}
+
 const getUnavailableShifts = async (req:Request, res:Response) => {
     try{
         if (req.userid !== undefined) {
@@ -38,4 +48,4 @@ const submitUnavailableShifts = async (req:Request, res:Response) => {
 }
 
 
-export default {getUnavailableShifts, submitUnavailableShifts};
+export default {getAllUnavailableShifts, getUnavailableShifts, submitUnavailableShifts};

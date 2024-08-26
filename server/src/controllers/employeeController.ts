@@ -123,8 +123,10 @@ const loginUser= async (req:Request, res:Response) => {
             maxAge: 3 * 24 * 60 * 60 * 1000 //3 days
         });
 
+        const accessTokenExpiresAt = new Date(Date.now() + 60 * 1000); // 60 seconds
+        const refreshTokenExpiresAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days
 
-        await tokenModel.updateRefreshToken(refreshToken, user.id);
+        await tokenModel.upsertToken(user.id, accessToken,accessTokenExpiresAt,refreshToken,refreshTokenExpiresAt );
 
         const {password_hash:_, ...userWithoutPasword} = user; //destructure to remove the pasword from the response
 

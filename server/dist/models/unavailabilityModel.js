@@ -11,6 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../config/db");
 const TABLE_NAME = 'employee_shift_unavailability';
+const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const unavailabilityShifts = yield (0, db_1.db)(TABLE_NAME)
+            .select("id", "employee_id", "shift_id", "day_id", "is_unavailable");
+        return unavailabilityShifts;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+});
 const getByEmployeeId = (employee_id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const unavailabilityShifts = yield (0, db_1.db)(TABLE_NAME)
@@ -43,4 +54,4 @@ const submitUnavailability = (update, employee_id) => __awaiter(void 0, void 0, 
         throw error;
     }
 });
-exports.default = { getByEmployeeId, submitUnavailability };
+exports.default = { getAll, getByEmployeeId, submitUnavailability };

@@ -3,16 +3,43 @@ import { Employee } from "../types/Employee"
 
 const TABLE_NAME:string = 'jwt_tokens'
 
-const updateRefreshToken = async(refreshToken: string, employeeId:number):Promise<number> =>{
+const upsertToken = async(employeeId:number, accessToken: string,accessTokenExpiresAt:Date, refreshToken: string, refreshTokenExpiresAt: Date):Promise<number> =>{
     try{
-        const affectedRows = await db(TABLE_NAME)
-        .update({token:refreshToken})
-        .where({employee_id:employeeId});
-        return affectedRows;
+        const existingToken = await db(TABLE_NAME).where({employee_id:employeeId}).first();
+
+        if (existingToken){
+            //if exists, update the record
+            const affectedRows = await db(TABLE_NAME)
+            .update({access_token: accessToken, access_token_expires_at:accessTokenExpiresAt, refresh_token:refreshToken, refresh_token_expires_at:refreshTokenExpiresAt})
+            .where({employee_id: employeeId});
+            return affectedRows;
+        }
+        else{
+            // If doesnt exist, insert a new record
+            const insertedId = await db(TABLE_NAME).insert({
+                employee_id: employeeId, access_token: accessToken, access_token_expires_at:accessTokenExpiresAt, refresh_token:refreshToken, refresh_token_expires_at:refreshTokenExpiresAt
+            }).returning('id');
+            
+            return Array.isArray(insertedId) ? insertedId[0] : insertedId;
+        }
     } catch(error){
-        console.error(`Error updating refresh token for employee ID ${employeeId}:`, error);
+        console.error(`Error saving token for employee ID ${employeeId}:`,error);
         throw error;
     }
 }
 
-export default {updateRefreshToken};
+const getTokenByEmployeeId = async (employeeId: number): Promise<{access_token:string, refresh_token:string} | null> => {
+    try{
+        const tokenData = await db(TABLE_NAME)
+        .select('access_token', 'refresh_token')
+        .where({employee_id: employeeId})
+        .first();
+
+        return tokenData || null;
+    }catch (error) {
+        console.error('Error fetching token:', error);
+        throw error;
+    }
+};
+
+export default {upsertToken, getTokenByEmployeeId};

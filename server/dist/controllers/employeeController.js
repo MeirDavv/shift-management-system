@@ -114,7 +114,9 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //secure:
             maxAge: 3 * 24 * 60 * 60 * 1000 //3 days
         });
-        yield tokenModel_1.default.updateRefreshToken(refreshToken, user.id);
+        const accessTokenExpiresAt = new Date(Date.now() + 60 * 1000); // 60 seconds
+        const refreshTokenExpiresAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days
+        yield tokenModel_1.default.upsertToken(user.id, accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt);
         const { password_hash: _ } = user, userWithoutPasword = __rest(user, ["password_hash"]); //destructure to remove the pasword from the response
         res.json({
             message: "Login sucessfully",

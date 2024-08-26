@@ -3,6 +3,17 @@ import {Unavailability} from '../types/Unavailability';
 
 const TABLE_NAME = 'employee_shift_unavailability'
 
+const getAll = async (): Promise<Unavailability[]> => {
+    try{
+        const unavailabilityShifts:Unavailability[] = await db(TABLE_NAME)
+        .select("id","employee_id","shift_id","day_id","is_unavailable")
+        return unavailabilityShifts;
+    } catch(error){
+        console.error(error);
+        throw error;
+    }
+}
+
 const getByEmployeeId = async (employee_id:number): Promise<Unavailability[]> => {
     try{
         const unavailabilityShifts:Unavailability[] = await db(TABLE_NAME)
@@ -36,4 +47,4 @@ const submitUnavailability = async (update:Unavailability, employee_id: number )
     }
 }
 
-export default {getByEmployeeId, submitUnavailability};
+export default {getAll, getByEmployeeId, submitUnavailability};
