@@ -14,4 +14,16 @@ const getAll = async (): Promise<Shift[]> => {
     }
 }
 
-export default {getAll};
+const updateShifts = async (shifts: Shift[]): Promise<void> => {
+    try{
+        await db(TABLE_NAME)
+        .insert(shifts)
+        .onConflict(['employee_id','day_id','shift_id'])
+        .merge(); // Updates existing rows if conflicts occur, otherwise inserts new rows
+    } catch (error){
+        console.error('Error updating shifts:', error);
+        throw error;
+    }
+}
+
+export default {getAll, updateShifts};

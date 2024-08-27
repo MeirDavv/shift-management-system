@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from '../../../store';
 import { fetchShifts } from "../../../store/actions/shiftActions";
 import { fetchEmployeesNames } from "../../../store/actions/employeeActions";
 import { Employee, EmployeeMap } from "../../../store/interfaces/employee";
+import RunAIScriptButton from "../../RunAIScriptButton";
 
 
 const ShiftsPage = () => {
@@ -60,6 +61,7 @@ const ShiftsPage = () => {
           </tr>
         ))
       }
+      <RunAIScriptButton></RunAIScriptButton>
     </section>
   )
 };

@@ -13,6 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shiftModel_1 = __importDefault(require("../models/shiftModel"));
+const child_process_1 = require("child_process");
+const path_1 = __importDefault(require("path"));
 const getShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const shifts = yield shiftModel_1.default.getAll();
@@ -23,4 +25,37 @@ const getShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-exports.default = { getShifts };
+const updateShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const shifts = req.body; // Extract the shifts data from the request body
+        if (!Array.isArray(shifts) || shifts.length === 0) {
+            res.status(400).json({ message: "Invalid data: shifts should be a non-empty array." });
+            return;
+        }
+        yield shiftModel_1.default.updateShifts(shifts); // Call the model function to update the shifts
+        res.status(200).json({ message: 'Shifts updated successfully' }); // Respond with a success message
+    }
+    catch (error) {
+        console.error('Error updating shifts:', error);
+        res.status(500).json({ message: 'Internal server error' }); // Handle errors and respond with a 500 status
+    }
+});
+// Route handler to trigger Pyhton script
+const runAIScript = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const scriptPath = path_1.default.join(__dirname, '../ai/shift_calculator.py');
+    (0, child_process_1.exec)(`python3 ${scriptPath}`, { timeout: 5000 }, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Execution error: ${error.message}`);
+            res.status(500).json({ error: 'Execution failed', details: error.message });
+            return;
+        }
+        if (stderr) {
+            console.error(`stderr: ${stderr}`);
+            res.status(500).json({ error: 'Script error', details: stderr });
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        res.status(200).json({ message: 'AI script executed successfully', output: stdout });
+    });
+});
+exports.default = { getShifts, updateShifts, runAIScript };

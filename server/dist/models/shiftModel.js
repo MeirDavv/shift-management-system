@@ -22,4 +22,16 @@ const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-exports.default = { getAll };
+const updateShifts = (shifts) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, db_1.db)(TABLE_NAME)
+            .insert(shifts)
+            .onConflict(['employee_id', 'day_id', 'shift_id'])
+            .merge(); // Updates existing rows if conflicts occur, otherwise inserts new rows
+    }
+    catch (error) {
+        console.error('Error updating shifts:', error);
+        throw error;
+    }
+});
+exports.default = { getAll, updateShifts };

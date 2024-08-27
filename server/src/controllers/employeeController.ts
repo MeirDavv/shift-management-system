@@ -162,4 +162,6 @@ const authUser = async (req:Request, res:Response) => {
     });
 };
 
+
+
 export default {getAllUsersNames, registerUser,loginUser, logoutUser, authUser};
