@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../config/db");
 const TABLE_NAME = 'employees';
+const AWAITING_FOR_APPROVAL_ROLE_ID = 4;
 const create = (employeeInfo) => __awaiter(void 0, void 0, void 0, function* () {
     const { first_name, last_name, email, password_hash } = employeeInfo;
     console.log(password_hash);
@@ -18,7 +19,8 @@ const create = (employeeInfo) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         //Hash the password
         const [employee] = yield trx(TABLE_NAME)
-            .insert({ first_name, last_name, email, password_hash }, ['email', 'first_name', 'last_name']);
+            .insert({ first_name, last_name, email, password_hash, role_id: AWAITING_FOR_APPROVAL_ROLE_ID
+        }, ['email', 'first_name', 'last_name']);
         yield trx.commit();
         return employee;
     }
@@ -110,4 +112,23 @@ const deleteEmployee = (id) => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
-exports.default = { create, getAllNames, getById, getByEmail, update, deleteEmployee };
+const updateEmployeeRole = (employeeId, roleId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, db_1.db)(TABLE_NAME)
+            .where({ id: employeeId })
+            .update({
+            role_id: roleId,
+            updated_at: db_1.db.fn.now(),
+        });
+        // Return the updated employee record (optional)
+        const updatedEmployee = yield (0, db_1.db)('employees')
+            .where({ id: employeeId })
+            .first();
+        return updatedEmployee;
+    }
+    catch (error) {
+        console.error('Error updating employee role:', error);
+        throw error;
+    }
+});
+exports.default = { create, getAllNames, getById, getByEmail, update, deleteEmployee, updateEmployeeRole };

@@ -14,6 +14,11 @@ const getAll = async (): Promise<Shift[]> => {
     }
 }
 
+// Function to delete all shifts
+export const deleteAllShifts = async (): Promise<void> => {
+    await db(TABLE_NAME).del(); // This will delete all records from the 'shifts' table
+};
+
 const updateShifts = async (shifts: Shift[]): Promise<void> => {
     try{
         await db(TABLE_NAME)
@@ -26,4 +31,4 @@ const updateShifts = async (shifts: Shift[]): Promise<void> => {
     }
 }
 
-export default {getAll, updateShifts};
+export default {getAll, deleteAllShifts, updateShifts};

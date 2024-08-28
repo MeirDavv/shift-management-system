@@ -148,4 +148,22 @@ const authUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         role_id: req.role_id
     });
 });
-exports.default = { getAllUsersNames, registerUser, loginUser, logoutUser, authUser };
+const updateEmployeeRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { employeeId } = (req.params);
+    const employeeIdNumber = Number(employeeId);
+    const { roleId } = req.body;
+    try {
+        const updatedEmployee = yield employeeModel_1.default.updateEmployeeRole(employeeIdNumber, roleId);
+        return res.status(200).json({
+            message: 'Employee role updated successfully',
+            employee: updatedEmployee, // Optionally include the updated employee data
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            message: 'Failed to update eemployee role',
+            error: error.message,
+        });
+    }
+});
+exports.default = { getAllUsersNames, registerUser, loginUser, logoutUser, authUser, updateEmployeeRole };

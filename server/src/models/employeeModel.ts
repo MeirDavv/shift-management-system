@@ -4,7 +4,7 @@ import { Employee, EmployeeIdAndName } from '../types/Employee';
 
 const TABLE_NAME:string = 'employees'
 
-
+const AWAITING_FOR_APPROVAL_ROLE_ID = 4
 
 const create = async (employeeInfo:Employee):Promise<Partial<Employee>> =>{
     const {first_name, last_name, email, password_hash } = employeeInfo;
@@ -15,7 +15,8 @@ const create = async (employeeInfo:Employee):Promise<Partial<Employee>> =>{
     try{
         //Hash the password
         const [employee] = await trx(TABLE_NAME)
-        .insert({first_name,last_name,email,password_hash},
+        .insert({first_name,last_name,email,password_hash, role_id:AWAITING_FOR_APPROVAL_ROLE_ID
+        },
             ['email','first_name','last_name']
         );
         await trx.commit();
@@ -120,4 +121,24 @@ const deleteEmployee = async (id:number):Promise<Employee | null> => {
     }
 }
 
-export default {create, getAllNames,getById,getByEmail,update,deleteEmployee}
+const updateEmployeeRole = async (employeeId:number, roleId: number) => {
+    try{
+        await db(TABLE_NAME)
+        .where({id:employeeId})
+        .update({
+            role_id: roleId,
+            updated_at: db.fn.now(),
+        });
+        // Return the updated employee record (optional)
+        const updatedEmployee = await db('employees')
+        .where({ id: employeeId })
+        .first();
+
+        return updatedEmployee;
+    } catch(error){
+        console.error('Error updating employee role:',error);
+        throw error;
+    }
+}
+
+export default {create, getAllNames,getById,getByEmail,update,deleteEmployee, updateEmployeeRole}

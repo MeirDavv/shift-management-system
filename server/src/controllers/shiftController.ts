@@ -16,6 +16,7 @@ const getShifts = async (req:Request, res:Response):Promise<void> => {
 }
 
 const updateShifts = async (req:Request, res:Response):Promise<void> => {
+
     try {
         const shifts: Shift[] = req.body; // Extract the shifts data from the request body
 
@@ -23,7 +24,10 @@ const updateShifts = async (req:Request, res:Response):Promise<void> => {
             res.status(400).json({message: "Invalid data: shifts should be a non-empty array."});
             return;
         }
+         // Step 1: Delete all existing shifts
+         await shiftModel.deleteAllShifts();
 
+         // Step 2: Insert new shifts
          await shiftModel.updateShifts(shifts); // Call the model function to update the shifts
          res.status(200).json({message: 'Shifts updated successfully'}); // Respond with a success message
     } catch(error){

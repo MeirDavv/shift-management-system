@@ -44,7 +44,14 @@ const ShiftsPage = () => {
     board[0][j + 1] = days[j]; // Vertical headers
   }
 
-  // Populate the contents of the table
+  // Populate the contents of the table with empty  space
+  for(let i =1; i<shifts.length + 1; i++){
+    for(let j=1; j<days.length + 1; j++){
+      board[i][j] = ' '
+    }
+  }
+
+  // Poopulate the contents of the table with actual shifts from the databasee
   for (const item of listShifts){
     board[item.shift_id][item.day_id] = employeeObject[item.employee_id];
   }

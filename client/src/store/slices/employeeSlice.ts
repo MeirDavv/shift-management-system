@@ -25,6 +25,12 @@ const employeesSlice = createSlice({
                 state.list[index] = action.payload;
             }
         },
+        updateRoleEmployee(state, action:PayloadAction<{employeeId:number,roleId:number}>){
+            const index = state.list.findIndex(emp => emp.id === action.payload.employeeId);
+            if (index!== -1){
+                state.list[index].role_id = action.payload.roleId;
+            }
+        },
         removeEmployee(state, action:PayloadAction<number>){
             state.list = state.list.filter(emp => emp.id !== action.payload);
         },
@@ -44,5 +50,5 @@ const employeesSlice = createSlice({
     }
 });
 
-export const {setEmployees,addEmployee,updateEmployee,removeEmployee} = employeesSlice.actions;
+export const {setEmployees,addEmployee,updateEmployee,removeEmployee, updateRoleEmployee} = employeesSlice.actions;
 export default employeesSlice.reducer;

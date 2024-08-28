@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteAllShifts = void 0;
 const db_1 = require("../config/db");
 const TABLE_NAME = 'employee_shift_availability';
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,6 +23,11 @@ const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
+// Function to delete all shifts
+const deleteAllShifts = () => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, db_1.db)(TABLE_NAME).del(); // This will delete all records from the 'shifts' table
+});
+exports.deleteAllShifts = deleteAllShifts;
 const updateShifts = (shifts) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, db_1.db)(TABLE_NAME)
@@ -34,4 +40,4 @@ const updateShifts = (shifts) => __awaiter(void 0, void 0, void 0, function* () 
         throw error;
     }
 });
-exports.default = { getAll, updateShifts };
+exports.default = { getAll, deleteAllShifts: exports.deleteAllShifts, updateShifts };

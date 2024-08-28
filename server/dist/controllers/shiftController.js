@@ -32,6 +32,9 @@ const updateShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             res.status(400).json({ message: "Invalid data: shifts should be a non-empty array." });
             return;
         }
+        // Step 1: Delete all existing shifts
+        yield shiftModel_1.default.deleteAllShifts();
+        // Step 2: Insert new shifts
         yield shiftModel_1.default.updateShifts(shifts); // Call the model function to update the shifts
         res.status(200).json({ message: 'Shifts updated successfully' }); // Respond with a success message
     }

@@ -15,6 +15,8 @@ router.get("/logout", employeeController.logoutUser);
 router.get("/auth", verifyToken, employeeController.authUser);
 router.get("/all/names", employeeController.getAllUsersNames);
 
+router.put('/:employeeId/role',employeeController.updateEmployeeRole)
+
 // Only admin can access these routes
 //router.get("/dashboard/settings" , verifyToken, authorizeRole('admin'), employeeController.adminDashboard);
 

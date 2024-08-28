@@ -162,6 +162,25 @@ const authUser = async (req:Request, res:Response) => {
     });
 };
 
+const updateEmployeeRole = async (req:Request, res:Response) => {
+    const {employeeId} = (req.params);
+    const employeeIdNumber = Number(employeeId)
+    const {roleId} = req.body;
+
+    try{
+        const updatedEmployee = await employeeModel.updateEmployeeRole(employeeIdNumber,roleId);
+        
+        return res.status(200).json({
+            message: 'Employee role updated successfully',
+            employee: updatedEmployee, // Optionally include the updated employee data
+          }); 
+    } catch(error:any){
+        return res.status(500).json({
+            message: 'Failed to update eemployee role',
+            error: error.message,
+        });
+    }
+}
 
 
-export default {getAllUsersNames, registerUser,loginUser, logoutUser, authUser};
+export default {getAllUsersNames, registerUser,loginUser, logoutUser, authUser,updateEmployeeRole};
