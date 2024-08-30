@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LoginRegisterProps } from "../interfaces/LoginRegister";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";

@@ -1,6 +1,4 @@
-import {AppDispatch} from '../index';
-import { setEmployees } from '../slices/employeeSlice';
-import { Employee } from '../interfaces/employee';
+
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 

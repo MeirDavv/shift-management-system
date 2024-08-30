@@ -43,7 +43,7 @@ const unavailabilitySlice = createSlice({
             state.loading = true;
             state.error = null;
         })
-        .addCase(submitUnavailability.fulfilled, (state, action) =>{
+        .addCase(submitUnavailability.fulfilled, (state) =>{
             state.loading = false;
             state.error = null;
         })

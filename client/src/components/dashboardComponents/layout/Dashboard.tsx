@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Logout } from "../Logout";
 import ShiftsPage from "../pages/ShiftsPage";
 import AvailabilityPage from "../pages/AvailabilityPage";
