@@ -5,7 +5,7 @@ import { LoginRegisterProps } from "../interfaces/LoginRegister";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:10000";
 
 export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
   const [first_name, setFirst_name] = useState<string>("");
