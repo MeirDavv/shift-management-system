@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { UnavailabilityState } from "../interfaces/availability";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const API_URL = process.env.REACT_APP_API_URL || "https://shift-management-system.onrender.com";
 
 // Thunk to fetch updated unavailability
 export const fetchUnavailability = createAsyncThunk('unavailability/fetchUnavailability',

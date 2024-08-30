@@ -10,8 +10,11 @@ def update_availability(shifts):
 
     # Load the API key from an environment variable
     api_key = os.getenv('AI_API_KEY')
+
     # Define the API URL
-    api_url = "http://localhost:3001/shifts"
+    api_url = os.getenv("REACT_APP_API_URL")
+    endpoint = "/shifts"
+    url = f'${api_url}{endpoint}'
 
     #Define headers with the API key
     headers = {
@@ -20,7 +23,7 @@ def update_availability(shifts):
     }
 
     # Send the POST request to update the shifts
-    response = requests.post(api_url, headers = headers, data=json.dumps(shifts))
+    response = requests.post(url, headers = headers, data=json.dumps(shifts))
 
         # Check the response
     if response.status_code == 200:

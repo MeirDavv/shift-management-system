@@ -1,11 +1,19 @@
 import requests
+from dotenv import load_dotenv
+import os
 
 def get_employees():
 
-    api_url = "http://localhost:3001/user/all/names"
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Access the environment variable
+    api_url = os.getenv("REACT_APP_API_URL")
+    endpoint = "/user/all"
+    url = f'${api_url}${endpoint}'
 
     try:
-        response = requests.get(api_url)
+        response = requests.get(url)
 
         if response.status_code == 200:
             employees = response.json()

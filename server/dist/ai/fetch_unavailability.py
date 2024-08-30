@@ -10,14 +10,16 @@ def get_unavailability():
     api_key = os.getenv('AI_API_KEY')
 
     # Define the API URL
-    api_url = "http://localhost:3001/unavailability/all"
+    api_url = os.getenv("REACT_APP_API_URL")
+    endpoint = "/unavailability/all"
+    url = f'${api_url}{endpoint}'
 
     # Define headers with the API key
     headers = {
         "Authorization": f"Bearer {api_key}"
     }
 
-    response = requests.get(api_url, headers=headers)
+    response = requests.get(url, headers=headers)
 
     data = response.json()
 
