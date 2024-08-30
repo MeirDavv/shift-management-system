@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = process.env.REACT_APP_API_URL || "https://shift-management-system.onrender.com";
+const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
 
 export const Logout = () => {
   const navigate = useNavigate();

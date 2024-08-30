@@ -10,7 +10,7 @@ def get_shift_settings():
     api_key = os.getenv('AI_API_KEY')
 
     # Define the API URL
-    api_url = os.getenv("REACT_APP_API_URL")
+    api_url = os.getenv("REACT_APP_BASE_URL")
     endpoint = "/shiftSettings/all"
     url = f'${api_url}{endpoint}'
 

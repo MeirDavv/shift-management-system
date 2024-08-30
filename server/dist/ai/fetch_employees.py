@@ -8,7 +8,7 @@ def get_employees():
     load_dotenv()
 
     # Access the environment variable
-    api_url = os.getenv("REACT_APP_API_URL")
+    api_url = os.getenv("REACT_APP_BASE_URL")
     endpoint = "/user/all"
     url = f'${api_url}${endpoint}'
 

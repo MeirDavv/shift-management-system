@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL || "https://shift-management-system.onrender.com";
+const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
 
 export const fetchShifts = createAsyncThunk('shifts/fetchShifts', async () => {
     try{

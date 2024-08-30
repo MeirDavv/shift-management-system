@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { login } from "../store/slices/authSlice";
 
-const API_URL = process.env.REACT_APP_API_URL || "https://shift-management-system.onrender.com";
+const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
 
 const Auth: React.FC<AuthProps> = ({ children }) => {
   const dispatch = useDispatch();
