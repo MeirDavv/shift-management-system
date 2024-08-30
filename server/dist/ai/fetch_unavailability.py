@@ -10,7 +10,7 @@ def get_unavailability():
     api_key = os.getenv('AI_API_KEY')
 
     # Define the API URL
-    api_url = os.getenv("REACT_APP_BASE_URL")
+    api_url = os.getenv("BASE_URL")
     endpoint = "/unavailability/all"
     url = f'${api_url}{endpoint}'
 

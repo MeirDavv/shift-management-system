@@ -12,7 +12,7 @@ def update_availability(shifts):
     api_key = os.getenv('AI_API_KEY')
 
     # Define the API URL
-    api_url = os.getenv("REACT_APP_BASE_URL")
+    api_url = os.getenv("BASE_URL")
     endpoint = "/shifts"
     url = f'${api_url}{endpoint}'
 
