@@ -5,7 +5,7 @@ import { LoginRegisterProps } from "../interfaces/LoginRegister";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 
-const API_URL = "https://shift-management-system.onrender.com/";
+const API_URL = "https://shift-management-system.onrender.com";
 
 export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
   const [first_name, setFirst_name] = useState<string>("");
