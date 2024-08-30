@@ -12,7 +12,7 @@ import shiftSetingsRouter from './routes/shiftSettingsRoute'
 const app = express();
 app.use(cors({
     credentials:true,
-    origin: ["http://localhost:5173","http://localhost:3001"]
+    origin: ["https://shift-management-system.onrender.com/"]
 }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

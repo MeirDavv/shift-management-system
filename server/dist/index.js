@@ -16,7 +16,7 @@ const shiftSettingsRoute_1 = __importDefault(require("./routes/shiftSettingsRout
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     credentials: true,
-    origin: ["http://localhost:5173", "http://localhost:3001"]
+    origin: ["https://shift-management-system.onrender.com/"]
 }));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
