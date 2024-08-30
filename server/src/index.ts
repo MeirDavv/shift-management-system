@@ -39,5 +39,5 @@ app.use(express.static(path.join(__dirname, "../../client/dist")))
 
 // All other GET requests not handled before will return our React app
 app.get("*", (req:Request,res:Response)=>{
-    res.sendFile(path.resolve(__dirname,"../../client/dist","index.html"));
+    res.sendFile(path.resolve(__dirname,"../../client/dist/index.html"));
 })

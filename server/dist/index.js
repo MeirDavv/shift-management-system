@@ -38,5 +38,5 @@ app.get("/api/:name", (req, res) => {
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/dist")));
 // All other GET requests not handled before will return our React app
 app.get("*", (req, res) => {
-    res.sendFile(path_1.default.resolve(__dirname, "../../client/dist", "index.html"));
+    res.sendFile(path_1.default.resolve(__dirname, "../../client/dist/index.html"));
 });
