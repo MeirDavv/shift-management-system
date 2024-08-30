@@ -130,7 +130,7 @@ const updateEmployeeRole = async (employeeId:number, roleId: number) => {
             updated_at: db.fn.now(),
         });
         // Return the updated employee record (optional)
-        const updatedEmployee = await db('employees')
+        const updatedEmployee = await db(TABLE_NAME)
         .where({ id: employeeId })
         .first();
 

@@ -121,7 +121,7 @@ const updateEmployeeRole = (employeeId, roleId) => __awaiter(void 0, void 0, voi
             updated_at: db_1.db.fn.now(),
         });
         // Return the updated employee record (optional)
-        const updatedEmployee = yield (0, db_1.db)('employees')
+        const updatedEmployee = yield (0, db_1.db)(TABLE_NAME)
             .where({ id: employeeId })
             .first();
         return updatedEmployee;

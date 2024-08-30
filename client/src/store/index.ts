@@ -4,6 +4,7 @@ import employeeReducer from './slices/employeeSlice';
 import shiftReducer from './slices/shiftSlice';
 import unavailabilityReducer from './slices/unavailabilitySlice'
 import roleReducer from './slices/roleSlice'
+import shiftSettingsReducer from './slices/shiftSettingsSlice'
 
 const store = configureStore({
     reducer:{
@@ -12,7 +13,7 @@ const store = configureStore({
         shifts: shiftReducer,
         unavailability: unavailabilityReducer,
         roles: roleReducer,
-
+        shiftSettings: shiftSettingsReducer
     },
 });
 

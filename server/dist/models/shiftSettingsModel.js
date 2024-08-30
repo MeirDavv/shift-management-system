@@ -9,35 +9,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAllShifts = void 0;
 const db_1 = require("../config/db");
-const TABLE_NAME = 'employee_shift_availability';
+const TABLE_NAME = 'shifts';
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const shifts = yield (0, db_1.db)(TABLE_NAME)
-            .select("id", "employee_id", "shift_id", "day_id");
-        return shifts;
+        const shiftSettings = yield (0, db_1.db)(TABLE_NAME)
+            .select("id", "name", "start_time", "end_time", "min_employee_count", "max_employee_count");
+        return shiftSettings;
     }
     catch (error) {
         console.error(error);
         throw error;
     }
 });
-// Function to delete all shifts
-const deleteAllShifts = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, db_1.db)(TABLE_NAME).del(); // This will delete all records from the 'shifts' table
-});
-exports.deleteAllShifts = deleteAllShifts;
-const updateShifts = (shifts) => __awaiter(void 0, void 0, void 0, function* () {
+const updateShiftSettings = (shiftId, newShiftSettings) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, db_1.db)(TABLE_NAME)
-            .insert(shifts);
-        // .onConflict(['employee_id','day_id','shift_id'])
-        // .merge(); // Updates existing rows if conflicts occur, otherwise inserts new rows
+            .where({ id: shiftId })
+            .update({
+            start_time: newShiftSettings.start_time,
+            end_time: newShiftSettings.end_time,
+            min_employee_count: newShiftSettings.min_employee_count,
+            max_employee_count: newShiftSettings.max_employee_count,
+            updated_at: db_1.db.fn.now()
+        });
+        // Return the updated shiftSetting record (optional)
+        const updatedShiftSettings = yield (0, db_1.db)(TABLE_NAME)
+            .where({ id: shiftId })
+            .first();
+        return updatedShiftSettings;
     }
     catch (error) {
-        console.error('Error updating shifts:', error);
+        console.error('Error updating shift settings:', error);
         throw error;
     }
 });
-exports.default = { getAll, deleteAllShifts: exports.deleteAllShifts, updateShifts };
+exports.default = { getAll, updateShiftSettings };

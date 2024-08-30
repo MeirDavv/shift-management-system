@@ -47,13 +47,13 @@ const ShiftsPage = () => {
   // Populate the contents of the table with empty  space
   for(let i =1; i<shifts.length + 1; i++){
     for(let j=1; j<days.length + 1; j++){
-      board[i][j] = ' '
+      board[i][j] = ['']
     }
   }
 
-  // Poopulate the contents of the table with actual shifts from the databasee
+  // Populate the contents of the table with actual shifts from the databasee
   for (const item of listShifts){
-    board[item.shift_id][item.day_id] = employeeObject[item.employee_id];
+    (board[item.shift_id][item.day_id] as string[]).push(employeeObject[item.employee_id]);
   }
 
   return (
@@ -63,7 +63,9 @@ const ShiftsPage = () => {
         board.map((row,i) =>(
           <tr key = {i}>
             {row.map((cell: string | null,j:number)=>(
-              <td key={j}>{cell}</td>
+              <td key={j}>
+                {Array.isArray(cell) ? cell.map((name,idx)=> <div key={idx}>{name}</div>) : cell}
+                </td>
             ))}
           </tr>
         ))

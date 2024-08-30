@@ -1,6 +1,7 @@
 from fetch_employees import get_employees
 from fetch_unavailability import get_unavailability
 from update_availability import update_availability
+from fetch_shift_settings import get_shift_settings
 
 # importing google or tools and declaring model template
 from ortools.sat.python import cp_model
@@ -10,13 +11,15 @@ shiftoptions = {}
 
 # set number of workers_ids, days and schedules as well as max schedules per day, 
 # as well as max shift amount difference per worker
+shift_settings = get_shift_settings()
 unavailable_shifts = get_unavailability()
 workers = get_employees()
 workers_ids = [worker['id'] for worker in workers]
-shifts = [1,2,3]
-days = [1,2,3,4,5,6,7]
+shifts = [1,2,3] #1 is morning, 2 is evening, 3 is night
+days = [1,2,3,4,5,6,7] #1 is sunday, 2 is monday... and so on
 maxshiftsperday = 1
 maxdifference = 2
+employees_per_shift = 2 # get from the database
 
 # create a tuple as a shift option list index, for each combination of worker, shift and day
 # use google or tools to create a boolean variable indicating if given worker works on that day, in that shift
@@ -38,10 +41,21 @@ for x in (workers_ids):
     for y in (days[:-1]): #iterate over all days except the last since we compare 2 days
         model.Add(shiftoptions[(x,y,3)] + shiftoptions[(x,y+1,1)] <= 1) #meaning both cases cant exist together
 
-# now we add the constraint of shift only being assigned to one worker or 0 (allow unassigned shift)
+# now we add the constraint of amount of employes per each shift dynamically, based on shift_settings data
 for y in (days):
     for z in (shifts):
-        model.Add(sum(shiftoptions[(x, y, z)] for x in (workers_ids)) <= 1)
+        min_employee_count = shift_settings[z]['min_employee_count']
+        max_employee_count = shift_settings[z]['max_employee_count']
+
+        # Calculate the number of workers available for this shift
+        available_workers = [x for x in workers_ids if (x, y, z) not in {(shift['employee_id'], shift['day_id'], shift['shift_id']) for shift in unavailable_shifts}]
+
+        # If there are workers available, enforce the min_employee_count
+        if len(available_workers) > 0:
+            model.Add(sum(shiftoptions[(x, y, z)] for x in available_workers) >= min_employee_count)
+        
+        # Enforce the max_employee_count constraint
+        model.Add(sum(shiftoptions[(x, y, z)] for x in workers_ids) <= max_employee_count)
 # now we add the constraint of a worker only working one shift per day
 for x in (workers_ids):
     for y in (days):
@@ -79,17 +93,19 @@ class SolutionPrinterClass(cp_model.CpSolverSolutionCallback):
             for y in (self._days):
                 print("day " + str(y))
                 for z in (self._shifts):
-                    assigned = False
+                    assigned = []
                     for x in (self._workers_ids):                        
                         if self.Value(self._shiftoptions[(x,y,z)]):
-                            assigned = True
+                            assigned.append(x)
                             shift_assignments = {
                                 'employee_id': x,
                                 'day_id': y,
                                 'shift_id': z
                             }
                             self._shift_assignments.append(shift_assignments)
-                    if not assigned:
+                    if len(assigned) > 0:
+                        print(f"Shift {z} on day {y} assigned to employees: {assigned}")
+                    else:
                         print(f"No worker assigned to shift {z} on day {y}")        
         self._solution_count += 1
         if self._solution_count >= 1:  # Stop after first solution
@@ -113,6 +129,7 @@ solver.Solve(model, solution_printer)
 
 #Get the collected shift assignments
 shift_assignments = solution_printer.get_shift_assignments()
+print(shift_assignments)
 update_availability(shift_assignments)
 
 

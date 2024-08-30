@@ -7,6 +7,7 @@ import shiftRouter from './routes/shiftRoutes';
 import unavailabilityRouter from './routes/unavailabilityRouter';
 import tokenRouter from './routes/tokenRoutes'
 import roleRouter from './routes/roleRoutes'
+import shiftSetingsRouter from './routes/shiftSettingsRoute'
 
 const app = express();
 app.use(cors({
@@ -27,6 +28,7 @@ app.use("/",shiftRouter);
 app.use("/",unavailabilityRouter);
 app.use("/",tokenRouter);
 app.use("/roles",roleRouter);
+app.use("/shiftSettings", shiftSetingsRouter)
 
 app.get("/api/:name",(req:Request,res:Response)=>{
     res.json({message: `Hello ${req.params.name}, from server!`});
