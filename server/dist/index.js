@@ -35,8 +35,8 @@ app.get("/api/:name", (req, res) => {
     res.json({ message: `Hello ${req.params.name}, from server!` });
 });
 // Have Node serve the files for our built React app
-app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
+app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/build")));
 // All other GET requests not handled before will return our React app
 app.get("*", (req, res) => {
-    res.sendFile(path_1.default.resolve(__dirname, "../client/build", "index.html"));
+    res.sendFile(path_1.default.resolve(__dirname, "../../client/build", "index.html"));
 });
