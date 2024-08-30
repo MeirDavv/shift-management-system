@@ -46,7 +46,7 @@ const AvailabilityPage = () => {
           {shifts.map((shift,shiftIndex) => (
             <tr key={shiftIndex}>
               <td>{shift}</td>
-              {days.map((day, dayIndex)=>{
+              {days.map((_, dayIndex)=>{
                 const key = `${shiftIndex+1}-${dayIndex+1}`;
                 return (
                   <td key={dayIndex}>
