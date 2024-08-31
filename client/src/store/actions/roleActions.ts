@@ -22,7 +22,7 @@ export const updateEmployeeRole = createAsyncThunk(
     async ({employeeIdNumber,roleId}:{employeeIdNumber:number,roleId:number}, {dispatch})=>{
         try {
             //update in the databsase
-            const response = await axios.put(`${API_URL}/user/${employeeIdNumber}/role`, {roleId});
+            const response = await axios.put(`${API_URL}/api/user/${employeeIdNumber}/role`, {roleId});
 
             // update in redux
             dispatch(updateRoleEmployee({employeeId:employeeIdNumber, roleId:roleId}));
