@@ -5,11 +5,11 @@ export enum Role {
 }
 
 const roleHierarchy = {
-    [Role.Admin] : 3,
+    [Role.Admin] : 1,
     [Role.Manager] : 2,
-    [Role.Worker] : 1
+    [Role.Worker] : 3
 }
 
 export const hasAccess = (userRole: Role, requiredRole: Role) : boolean => {
-    return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
+    return roleHierarchy[userRole] <= roleHierarchy[requiredRole];
 };
