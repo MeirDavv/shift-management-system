@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState } from "../interfaces/auth";
+import { Role } from "../../utils/roleUtils";
 
 const initialState: AuthState = {
     isAuthenticated: false,
@@ -13,15 +14,17 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers:{
-        login(state, action: PayloadAction<string>){
+        login(state, action: PayloadAction<{email:string, role:Role}>){
             state.isAuthenticated = true;
-            state.email = action.payload;
+            state.email = action.payload.email;
+            state.role = action.payload.role;
             state.loading = false;
             state.message = "Login successful"
         },
         logout(state){
             state.isAuthenticated = false;
             state.email = null;
+            state.role = null;
             state.message = "Logout successful"
         },
         setLoading(state, action:PayloadAction<boolean>){

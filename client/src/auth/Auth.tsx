@@ -5,8 +5,16 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { login } from "../store/slices/authSlice";
+import { Role } from "../utils/roleUtils";
 
 const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
+
+const roleMapping:any = {
+  1: Role.Admin,
+  2: Role.Manager,
+  3: Role.Worker,
+  // Add other mappings as needed
+};
 
 const Auth: React.FC<AuthProps> = ({ children }) => {
   const dispatch = useDispatch();
@@ -25,7 +33,8 @@ const Auth: React.FC<AuthProps> = ({ children }) => {
       });
 
       if (response.status === 200) {
-        dispatch(login(response.data.email));
+        const role = roleMapping[response.data.role_id]; // Map role_id to Role
+        dispatch(login({email: response.data.email, role: role}));
       }
     } catch (error) {
       console.error(error);
