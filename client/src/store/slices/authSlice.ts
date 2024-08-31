@@ -4,6 +4,7 @@ import { AuthState } from "../interfaces/auth";
 const initialState: AuthState = {
     isAuthenticated: false,
     email: null,
+    role:null,
     loading: false,
     message: "",
 };

@@ -9,6 +9,9 @@ import Navbar from "../Navbar";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store";
 import { fetchEmployeesNames} from "../../../store/actions/employeeActions";
+import ProtectedElement from "../../ProtectedElement";
+import { Role } from "../../../utils/roleUtils";
+
 
 export const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +29,9 @@ export const Dashboard = () => {
           <Route path="shifts" element={<ShiftsPage />} />
           <Route path="availability" element={<AvailabilityPage />} />
           <Route path="employees" element={<EmployeesPage />} />
-          <Route path="settings" element={<SettingsPage />} />
+          <ProtectedElement requiredRole={Role.Admin}>
+            <Route path="settings" element={<SettingsPage />} />
+          </ProtectedElement>
         </Routes>
       </main>
     </div>
