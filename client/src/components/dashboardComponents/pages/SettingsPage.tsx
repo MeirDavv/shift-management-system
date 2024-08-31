@@ -20,6 +20,7 @@ const SettingsPage = () => {
     setFormValues(shiftSettings);
   }, [shiftSettings]);
 
+  console.log("Form values",formValues)
 
   const handleChange = (index:number, field: keyof shiftSettings, value:any) => {
     const updatedFormValues = [...formValues];
@@ -66,8 +67,8 @@ const SettingsPage = () => {
             <td>Max Employe Count</td>
           </thead>
           <tbody>
-            {formValues.map((row,i)=> (
-              <tr key={i}>
+            {formValues.sort((a,b)=>a.id-b.id).map((row)=> (
+              <tr key={row.id}>
                 <td>{row.name} Shift:</td>
                 <td><input required type="time" value={row.start_time} onChange={(e)=>handleChange(i,"start_time",e.target.value)} /></td>
                 <td><input required type="time" value={row.end_time} onChange={(e)=>handleChange(i,"end_time",e.target.value)} /></td>
