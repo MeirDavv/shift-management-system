@@ -3,6 +3,7 @@ import shiftModel from '../models/shiftModel';
 import {Shift} from '../types/Shift';
 import { exec } from "child_process";
 import path from "path";
+import axios from 'axios';
 
 
 const getShifts = async (req:Request, res:Response):Promise<void> => {
@@ -38,22 +39,31 @@ const updateShifts = async (req:Request, res:Response):Promise<void> => {
 
 // Route handler to trigger Pyhton script
 const runAIScript = async (req:Request, res:Response): Promise<void> => {
-    const scriptPath = path.join(__dirname,'../ai/shift_calculator.py');
+    // const scriptPath = path.join(__dirname,'../ai/shift_calculator.py');
 
-    exec(`python3 ${scriptPath}`, {timeout: 5000}, (error, stdout, stderr)=>{
-        if(error){
-            console.error(`Execution error: ${error.message}`);
-            res.status(500).json({error:'Execution failed', details: error.message});
-            return;
-        }
-        if(stderr){
-            console.error(`stderr: ${stderr}`);
-            res.status(500).json({error: 'Script error', details: stderr});
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-        res.status(200).json({message: 'AI script executed successfully', output:stdout});
-    });
+    // exec(`python3 ${scriptPath}`, {timeout: 5000}, (error, stdout, stderr)=>{
+    //     if(error){
+    //         console.error(`Execution error: ${error.message}`);
+    //         res.status(500).json({error:'Execution failed', details: error.message});
+    //         return;
+    //     }
+    //     if(stderr){
+    //         console.error(`stderr: ${stderr}`);
+    //         res.status(500).json({error: 'Script error', details: stderr});
+    //         return;
+    //     }
+    //     console.log(`stdout: ${stdout}`);
+    //     res.status(200).json({message: 'AI script executed successfully', output:stdout});
+    // });
+    try{
+        const python_api_url = 'https://ai-shift-calculation.onrender.com';
+        const endpoint = '/run-ai-script';
+        const response = await axios.post(`${python_api_url}${endpoint}`);
+        res.status(200).json(response.data);
+    } catch(error:any){
+        console.error(`Error: ${error.message}`);
+        res.status(500).json({error: 'Failed to execute AI script', details: error.message});
+    }
 };
 
 export default {getShifts, updateShifts, runAIScript};

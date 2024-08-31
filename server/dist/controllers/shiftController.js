@@ -13,8 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shiftModel_1 = __importDefault(require("../models/shiftModel"));
-const child_process_1 = require("child_process");
-const path_1 = __importDefault(require("path"));
+const axios_1 = __importDefault(require("axios"));
 const getShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const shifts = yield shiftModel_1.default.getAll();
@@ -45,20 +44,30 @@ const updateShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 // Route handler to trigger Pyhton script
 const runAIScript = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const scriptPath = path_1.default.join(__dirname, '../ai/shift_calculator.py');
-    (0, child_process_1.exec)(`python3 ${scriptPath}`, { timeout: 5000 }, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Execution error: ${error.message}`);
-            res.status(500).json({ error: 'Execution failed', details: error.message });
-            return;
-        }
-        if (stderr) {
-            console.error(`stderr: ${stderr}`);
-            res.status(500).json({ error: 'Script error', details: stderr });
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-        res.status(200).json({ message: 'AI script executed successfully', output: stdout });
-    });
+    // const scriptPath = path.join(__dirname,'../ai/shift_calculator.py');
+    // exec(`python3 ${scriptPath}`, {timeout: 5000}, (error, stdout, stderr)=>{
+    //     if(error){
+    //         console.error(`Execution error: ${error.message}`);
+    //         res.status(500).json({error:'Execution failed', details: error.message});
+    //         return;
+    //     }
+    //     if(stderr){
+    //         console.error(`stderr: ${stderr}`);
+    //         res.status(500).json({error: 'Script error', details: stderr});
+    //         return;
+    //     }
+    //     console.log(`stdout: ${stdout}`);
+    //     res.status(200).json({message: 'AI script executed successfully', output:stdout});
+    // });
+    try {
+        const python_api_url = 'https://ai-shift-calculation.onrender.com';
+        const endpoint = '/run-ai-script';
+        const response = yield axios_1.default.post(`${python_api_url}${endpoint}`);
+        res.status(200).json(response.data);
+    }
+    catch (error) {
+        console.error(`Error: ${error.message}`);
+        res.status(500).json({ error: 'Failed to execute AI script', details: error.message });
+    }
 });
 exports.default = { getShifts, updateShifts, runAIScript };
