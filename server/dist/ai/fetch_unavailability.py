@@ -11,7 +11,7 @@ def get_unavailability():
 
     # Define the API URL
     api_url = os.getenv("BASE_URL")
-    endpoint = "/unavailability/all"
+    endpoint = "/api/unavailability/all"
     url = f'{api_url}{endpoint}'
 
     # Define headers with the API key
@@ -20,9 +20,13 @@ def get_unavailability():
     }
 
     response = requests.get(url, headers=headers)
+    print("response: ",response.text)
 
     data = response.json()
 
     filtered_data = [item for item in data if item["is_unavailable"] == True]
 
     return filtered_data
+
+
+get_unavailability()

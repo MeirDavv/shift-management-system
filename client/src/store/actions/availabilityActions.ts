@@ -8,7 +8,7 @@ const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-syst
 export const fetchUnavailability = createAsyncThunk('unavailability/fetchUnavailability',
     async (_, {rejectWithValue}) => {
         try{
-            const response = await axios.get(`${API_URL}/unavailability`,{withCredentials: true});
+            const response = await axios.get(`${API_URL}/api/unavailability`,{withCredentials: true});
             return response.data;
         }catch(error:any){
             rejectWithValue(error.response.data);
@@ -32,7 +32,7 @@ export const submitUnavailability = createAsyncThunk('unavailability/submitUnava
         console.log("Data being sent to backend:", updates); // Log the data
 
         try {
-            const response = await axios.post(`${API_URL}/unavailability`, updates, {withCredentials:true});
+            const response = await axios.post(`${API_URL}/api/unavailability`, updates, {withCredentials:true});
             return response.data || 'Update successful';
         } catch (error:any){
             return rejectWithValue(error.response.data);

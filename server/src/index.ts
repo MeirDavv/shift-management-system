@@ -24,9 +24,9 @@ app.listen(PORT, () => {
 })
 
 app.use("/api",employeeRouter);
-app.use("/",shiftRouter);
-app.use("/",unavailabilityRouter);
-app.use("/",tokenRouter);
+app.use("/api",shiftRouter);
+app.use("/api",unavailabilityRouter);
+app.use("/api",tokenRouter);
 app.use("/api",roleRouter);
 app.use("/api", shiftSetingsRouter)
 

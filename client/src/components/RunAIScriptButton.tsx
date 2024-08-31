@@ -5,7 +5,7 @@ const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-syst
 const RunAIScriptButton = () => {
     const runAIScript = async () => {
         try{
-            const response = await axios.post(`${API_URL}/run-ai-script`,{},{
+            const response = await axios.post(`${API_URL}/api/run-ai-script`,{},{
                 withCredentials:true,  // Ensure cookies (containing JWT) are sent with the request
 
             });

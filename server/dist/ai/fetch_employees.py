@@ -16,8 +16,6 @@ def get_employees():
         response = requests.get(url)
 
         if response.status_code == 200:
-            print("Raw response content:", response.text)  # Print the raw content of the response
-
             employees = response.json()
             return employees
 
@@ -29,5 +27,3 @@ def get_employees():
         print(f"An error occured: {e}")
         return None
 
-emp = get_employees()
-print(emp)
