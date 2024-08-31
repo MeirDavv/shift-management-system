@@ -67,13 +67,13 @@ const SettingsPage = () => {
             <td>Max Employe Count</td>
           </thead>
           <tbody>
-            {[...formValues].sort((a,b)=>a.id-b.id).map((row)=> (
+            {[...formValues].sort((a,b)=>a.id-b.id).map((row, index)=> (
               <tr key={row.id}>
                 <td>{row.name} Shift:</td>
-                <td><input required type="time" value={row.start_time} onChange={(e)=>handleChange(row.id,"start_time",e.target.value)} /></td>
-                <td><input required type="time" value={row.end_time} onChange={(e)=>handleChange(row.id,"end_time",e.target.value)} /></td>
-                <td><input required type="number" value={row.min_employee_count} onChange={(e)=>handleChange(row.id,"min_employee_count",e.target.value)} /></td>
-                <td><input required type="number" value={row.max_employee_count} onChange={(e)=>handleChange(row.id,"max_employee_count",e.target.value)} /></td>
+                <td><input required type="time" value={row.start_time} onChange={(e)=>handleChange(index,"start_time",e.target.value)} /></td>
+                <td><input required type="time" value={row.end_time} onChange={(e)=>handleChange(index,"end_time",e.target.value)} /></td>
+                <td><input required type="number" value={row.min_employee_count} onChange={(e)=>handleChange(index,"min_employee_count",e.target.value)} /></td>
+                <td><input required type="number" value={row.max_employee_count} onChange={(e)=>handleChange(index,"max_employee_count",e.target.value)} /></td>
               </tr>
             ))}
           </tbody>
