@@ -67,7 +67,7 @@ const SettingsPage = () => {
             <td>Max Employe Count</td>
           </thead>
           <tbody>
-            {formValues.sort((a,b)=>a.id-b.id).map((row)=> (
+            {[...formValues].sort((a,b)=>a.id-b.id).map((row)=> (
               <tr key={row.id}>
                 <td>{row.name} Shift:</td>
                 <td><input required type="time" value={row.start_time} onChange={(e)=>handleChange(row.id,"start_time",e.target.value)} /></td>
