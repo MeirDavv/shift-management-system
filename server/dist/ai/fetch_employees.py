@@ -9,13 +9,15 @@ def get_employees():
 
     # Access the environment variable
     api_url = os.getenv("BASE_URL")
-    endpoint = "/user/all"
+    endpoint = "/api/user/all/names"
     url = f'{api_url}{endpoint}'
 
     try:
         response = requests.get(url)
 
         if response.status_code == 200:
+            print("Raw response content:", response.text)  # Print the raw content of the response
+
             employees = response.json()
             return employees
 
@@ -26,3 +28,6 @@ def get_employees():
     except Exception as e:
         print(f"An error occured: {e}")
         return None
+
+emp = get_employees()
+print(emp)

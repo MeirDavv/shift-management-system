@@ -4,7 +4,7 @@ import { updateRoleEmployee } from '../slices/employeeSlice';
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 export const fetchRoles = createAsyncThunk('roles/fetchRoles', async () => {
     try {
-        const response = await axios.get(`${API_URL}/roles/all/names`);
+        const response = await axios.get(`${API_URL}/api/roles/all/names`);
         console.log("response.data: ", response.data);
         return response.data;
     }

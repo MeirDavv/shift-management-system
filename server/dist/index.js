@@ -25,12 +25,12 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
-app.use("/user", employeeRoutes_1.default);
+app.use("/api", employeeRoutes_1.default);
 app.use("/", shiftRoutes_1.default);
 app.use("/", unavailabilityRouter_1.default);
 app.use("/", tokenRoutes_1.default);
-app.use("/roles", roleRoutes_1.default);
-app.use("/shiftSettings", shiftSettingsRoute_1.default);
+app.use("/api", roleRoutes_1.default);
+app.use("/api", shiftSettingsRoute_1.default);
 app.get("/api/:name", (req, res) => {
     res.json({ message: `Hello ${req.params.name}, from server!` });
 });

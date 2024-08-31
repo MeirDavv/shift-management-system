@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-syst
 export const loginUser = (credentials:{email:string,password:string}, navigate: Function) => async(dispatch:AppDispatch) => {
     try{
         dispatch(setLoading(true));
-        const response = await axios.post(`${API_URL}/user/login`,credentials, {withCredentials:true});
+        const response = await axios.post(`${API_URL}/api/user/login`,credentials, {withCredentials:true});
         dispatch(login(response.data.user.email));
         navigate("/dashboard");
     } catch(error:any){
@@ -20,7 +20,7 @@ export const loginUser = (credentials:{email:string,password:string}, navigate: 
 export const registerUser = (userData : {first_name:string,last_name:string, email:string, password:string}, navigate: Function) => async (dispatch: AppDispatch) => {
     try{
         dispatch(setLoading(true));
-        const response = await axios.post(`${API_URL}/user/register`,userData, {withCredentials:true});
+        const response = await axios.post(`${API_URL}/api/user/register`,userData, {withCredentials:true});
         dispatch(setMessage(response.data.message));
         navigate("/login");
     } catch(error:any){
@@ -33,7 +33,7 @@ export const registerUser = (userData : {first_name:string,last_name:string, ema
 export const verifyUser = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(setLoading(true));
-        const response = await axios.get(`${API_URL}/user/auth`, {withCredentials: true});
+        const response = await axios.get(`${API_URL}/api/user/auth`, {withCredentials: true});
         dispatch(login(response.data.email))
     }catch(error){
         console.error(error);

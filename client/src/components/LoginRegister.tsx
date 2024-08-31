@@ -20,7 +20,7 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
   const handleLoginRegister = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const endpoint = title === "Login" ? "/user/login" : "/user/register";
+    const endpoint = title === "Login" ? "/api/user/login" : "/api/user/register";
     const requestData =
       title === "Login"
         ? { email, password }

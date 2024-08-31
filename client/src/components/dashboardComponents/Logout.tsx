@@ -8,7 +8,7 @@ export const Logout = () => {
 
   const logoutUser = async () => {
     try {
-      const endpoint: string = "/user/logout";
+      const endpoint: string = "/api/user/logout";
       const res = await axios.get(`${API_URL}${endpoint}`, {
         withCredentials: true,
       });

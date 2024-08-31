@@ -23,12 +23,12 @@ app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`)
 })
 
-app.use("/user",employeeRouter);
+app.use("/api",employeeRouter);
 app.use("/",shiftRouter);
 app.use("/",unavailabilityRouter);
 app.use("/",tokenRouter);
-app.use("/roles",roleRouter);
-app.use("/shiftSettings", shiftSetingsRouter)
+app.use("/api",roleRouter);
+app.use("/api", shiftSetingsRouter)
 
 app.get("/api/:name",(req:Request,res:Response)=>{
     res.json({message: `Hello ${req.params.name}, from server!`});

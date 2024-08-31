@@ -8,7 +8,7 @@ const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-syst
 
 export const fetchShiftSettings = createAsyncThunk('shiftSetings/fetchShiftSettings', async () => {
     try{
-        const response = await axios.get(`${API_URL}/shiftSettings/all`);
+        const response = await axios.get(`${API_URL}/api/shiftSettings/all`);
         console.log("response.data: ", response.data);
         return response.data;
     } catch (error){
@@ -22,7 +22,7 @@ export const updateShiftSettingsAction = createAsyncThunk(
     async ({shiftSettings}:{shiftSettings:shiftSettings}, {dispatch})=>{
         try {
             //update in the databsase
-            const response = await axios.put(`${API_URL}/shiftSettings/${shiftSettings.id}/update`, {newShiftSettings:shiftSettings});
+            const response = await axios.put(`${API_URL}/api/shiftSettings/${shiftSettings.id}/update`, {newShiftSettings:shiftSettings});
 
             // update in redux
             dispatch(updateShiftSettings(shiftSettings));

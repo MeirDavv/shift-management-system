@@ -20,7 +20,7 @@ const Auth: React.FC<AuthProps> = ({ children }) => {
 
   const verifyAuth = async () => {
     try {
-      const response = await axios.get(`${API_URL}/user/auth`, {
+      const response = await axios.get(`${API_URL}/api/user/auth`, {
         withCredentials: true,
       });
 

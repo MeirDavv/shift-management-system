@@ -7,15 +7,15 @@ import authorizeRole from "@/middlewares/authorizeRole";
 
 const router = express.Router();
 
-router.post("/register", employeeController.registerUser);
-router.post("/login", employeeController.loginUser);
-router.get("/logout", employeeController.logoutUser);
+router.post("/user/register", employeeController.registerUser);
+router.post("/user/login", employeeController.loginUser);
+router.get("/user/logout", employeeController.logoutUser);
 
 
-router.get("/auth", verifyToken, employeeController.authUser);
-router.get("/all/names", employeeController.getAllUsersNames);
+router.get("/user/auth", verifyToken, employeeController.authUser);
+router.get("/user/all/names", employeeController.getAllUsersNames);
 
-router.put('/:employeeId/role',employeeController.updateEmployeeRole)
+router.put('/user/:employeeId/role',employeeController.updateEmployeeRole)
 
 // Only admin can access these routes
 //router.get("/dashboard/settings" , verifyToken, authorizeRole('admin'), employeeController.adminDashboard);

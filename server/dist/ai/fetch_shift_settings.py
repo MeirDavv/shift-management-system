@@ -11,7 +11,7 @@ def get_shift_settings():
 
     # Define the API URL
     api_url = os.getenv("BASE_URL")
-    endpoint = "/shiftSettings/all"
+    endpoint = "api/shiftSettings/all"
     url = f'{api_url}{endpoint}'
 
     # Define headers with the API key

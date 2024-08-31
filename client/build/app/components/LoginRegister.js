@@ -15,7 +15,7 @@ export const LoginRegister = ({ title }) => {
     const navigate = useNavigate();
     const handleLoginRegister = async (event) => {
         event.preventDefault();
-        const endpoint = title === "Login" ? "/user/login" : "/user/register";
+        const endpoint = title === "Login" ? "/user/login" : "/api/user/register";
         const requestData = title === "Login"
             ? { email, password }
             : { first_name, last_name, email, password };
