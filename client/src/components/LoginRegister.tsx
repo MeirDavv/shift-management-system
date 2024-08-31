@@ -4,8 +4,16 @@ import axios from "axios";
 import { LoginRegisterProps } from "../interfaces/LoginRegister";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
+import { Role } from "../utils/roleUtils";
 
 const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
+
+const roleMapping:any = {
+  1: Role.Admin,
+  2: Role.Manager,
+  3: Role.Worker,
+  // Add other mappings as needed
+};
 
 export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
   const [first_name, setFirst_name] = useState<string>("");
@@ -39,7 +47,8 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
         console.log(title);
 
         if (title === "Login") {
-          dispatch(login(email));
+          const role = roleMapping[response.data.role_id]; // Map role_id to Role
+          dispatch(login({ email: response.data.email, role: role }));
           navigate("/dashboard");
         } else {
           navigate("/login");
