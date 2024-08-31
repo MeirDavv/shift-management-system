@@ -20,7 +20,6 @@ def get_unavailability():
     }
 
     response = requests.get(url, headers=headers)
-    print("response: ",response.text)
 
     data = response.json()
 
@@ -28,5 +27,3 @@ def get_unavailability():
 
     return filtered_data
 
-
-get_unavailability()

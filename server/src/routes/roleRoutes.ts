@@ -4,6 +4,6 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/api/roles/all/names", roleController.getAllRoles)
+router.get("/roles/all/names", roleController.getAllRoles)
 
 export default router

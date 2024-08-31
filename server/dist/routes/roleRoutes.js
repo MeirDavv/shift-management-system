@@ -6,5 +6,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const roleController_1 = __importDefault(require("../controllers/roleController"));
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-router.get("/api/roles/all/names", roleController_1.default.getAllRoles);
+router.get("/roles/all/names", roleController_1.default.getAllRoles);
 exports.default = router;
