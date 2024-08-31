@@ -6,7 +6,8 @@ const TABLE_NAME = 'shifts';
 const getAll = async ():Promise<shiftSettings[]> => {
     try{
         const shiftSettings:shiftSettings[] = await db(TABLE_NAME)
-        .select("id", "name", "start_time","end_time","min_employee_count","max_employee_count");
+        .select("id", "name", "start_time","end_time","min_employee_count","max_employee_count")
+        .orderBy("id");
         return shiftSettings;
     } catch(error){
         console.error(error);

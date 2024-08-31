@@ -14,7 +14,8 @@ const TABLE_NAME = 'shifts';
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const shiftSettings = yield (0, db_1.db)(TABLE_NAME)
-            .select("id", "name", "start_time", "end_time", "min_employee_count", "max_employee_count");
+            .select("id", "name", "start_time", "end_time", "min_employee_count", "max_employee_count")
+            .orderBy("id");
         return shiftSettings;
     }
     catch (error) {
