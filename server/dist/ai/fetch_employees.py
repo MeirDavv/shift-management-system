@@ -10,7 +10,7 @@ def get_employees():
     # Access the environment variable
     api_url = os.getenv("BASE_URL")
     endpoint = "/user/all"
-    url = f'${api_url}${endpoint}'
+    url = f'{api_url}{endpoint}'
 
     try:
         response = requests.get(url)

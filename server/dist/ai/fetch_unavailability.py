@@ -12,7 +12,7 @@ def get_unavailability():
     # Define the API URL
     api_url = os.getenv("BASE_URL")
     endpoint = "/unavailability/all"
-    url = f'${api_url}{endpoint}'
+    url = f'{api_url}{endpoint}'
 
     # Define headers with the API key
     headers = {

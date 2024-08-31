@@ -14,7 +14,7 @@ def update_availability(shifts):
     # Define the API URL
     api_url = os.getenv("BASE_URL")
     endpoint = "/shifts"
-    url = f'${api_url}{endpoint}'
+    url = f'{api_url}{endpoint}'
 
     #Define headers with the API key
     headers = {
