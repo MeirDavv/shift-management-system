@@ -8,7 +8,7 @@ const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-syst
 
 export const fetchShiftSettings = createAsyncThunk('shiftSetings/fetchShiftSettings', async () => {
     try{
-        const response = await axios.get(`${API_URL}/api/shiftSettings/all`);
+        const response = await axios.get<shiftSettings[]>(`${API_URL}/api/shiftSettings/all`);
         console.log("response.data: ", response.data);
         return response.data;
     } catch (error){
