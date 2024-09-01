@@ -34,9 +34,7 @@ export const Dashboard = () => {
             </ProtectedElement>
             } />
           <Route path="settings" element={
-            <ProtectedElement requiredRole={Role.Admin}>
               <SettingsPage />
-            </ProtectedElement>
             } />
         </Routes>
       </main>
