@@ -12,7 +12,7 @@ const ProtectedElement: React.FC<ProtectedElementProps> = ({ requiredRole, child
     const userRole = useSelector((state:RootState)=> state.auth.role);
 
     if(!hasAccess(userRole as Role, requiredRole)){
-        return <>You don't have access to this page...</>
+        return null
     }
     return <>{children}</>
 }
