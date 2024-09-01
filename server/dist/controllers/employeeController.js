@@ -95,7 +95,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             last_name: user.last_name,
             email: user.email,
             role_id: user.role_id
-        }, ACCESS_TOKEN_SECRET, { expiresIn: "60s" });
+        }, ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
         const refreshToken = jsonwebtoken_1.default.sign({
             userid: user.id,
             first_name: user.first_name,
@@ -107,7 +107,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.cookie("token", accessToken, {
             httpOnly: true,
             //secure:
-            maxAge: 60 * 1000, //60 seconds
+            maxAge: 60 * 10 * 1000, //10 minutes
         });
         res.cookie("refresh", refreshToken, {
             httpOnly: true,
