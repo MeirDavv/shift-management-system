@@ -5,6 +5,8 @@ import { fetchShifts } from "../../../store/actions/shiftActions";
 import { fetchEmployeesNames } from "../../../store/actions/employeeActions";
 import { Employee, EmployeeMap } from "../../../store/interfaces/employee";
 import RunAIScriptButton from "../../RunAIScriptButton";
+import ProtectedElement from "../../ProtectedElement";
+import { Role } from "../../../utils/roleUtils";
 
 
 const ShiftsPage = () => {
@@ -75,7 +77,9 @@ const handleScriptRunComplete = () => {
           </tr>
         ))
       }
-      <RunAIScriptButton onComplete = {handleScriptRunComplete}></RunAIScriptButton>
+      <ProtectedElement requiredRole={Role.Manager}>
+        <RunAIScriptButton onComplete = {handleScriptRunComplete}></RunAIScriptButton>
+      </ProtectedElement>
     </section>
   )
 };

@@ -28,7 +28,11 @@ export const Dashboard = () => {
         <Routes>
           <Route path="shifts" element={<ShiftsPage />} />
           <Route path="availability" element={<AvailabilityPage />} />
-          <Route path="employees" element={<EmployeesPage />} />
+          <Route path="employees" element={
+            <ProtectedElement requiredRole={Role.Manager}>
+              <EmployeesPage />
+            </ProtectedElement>
+            } />
           <Route path="settings" element={
             <ProtectedElement requiredRole={Role.Admin}>
               <SettingsPage />
