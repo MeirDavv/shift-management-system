@@ -22,6 +22,11 @@ const ShiftsPage = () => {
     dispatch(fetchEmployeesNames());
 }, [dispatch]);
 
+const handleScriptRunComplete = () => {
+  dispatch(fetchShifts());
+  dispatch(fetchEmployeesNames());
+}
+
   
   const days = ['Sunday', 'Monday','Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const shifts = ['Morning', 'Evening', 'Night'];
@@ -70,7 +75,7 @@ const ShiftsPage = () => {
           </tr>
         ))
       }
-      <RunAIScriptButton></RunAIScriptButton>
+      <RunAIScriptButton onComplete = {handleScriptRunComplete}></RunAIScriptButton>
     </section>
   )
 };
