@@ -4,7 +4,7 @@ import {shiftSettings} from '../interfaces/shiftSettings'
 import { updateShiftSettings } from '../slices/shiftSettingsSlice';
 
 
-const API_URL = process.env.REACT_APP_BASE_URL;
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 export const fetchShiftSettings = createAsyncThunk('shiftSetings/fetchShiftSettings', async () => {
     try{
