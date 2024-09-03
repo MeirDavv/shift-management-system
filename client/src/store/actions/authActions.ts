@@ -2,7 +2,7 @@ import {AppDispatch} from '../index'
 import axios from 'axios'
 import {login, setLoading, setMessage} from '../slices/authSlice'
 
-const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
+const API_URL = process.env.REACT_APP_BASE_URL;
 
 export const loginUser = (credentials:{email:string,password:string}, navigate: Function) => async(dispatch:AppDispatch) => {
     try{

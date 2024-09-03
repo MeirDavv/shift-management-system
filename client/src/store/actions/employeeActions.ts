@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
+const API_URL = process.env.REACT_APP_BASE_URL;
 
 export const fetchEmployeesNames = createAsyncThunk('employees/fetchEmployeesNames', async () => {
     try{

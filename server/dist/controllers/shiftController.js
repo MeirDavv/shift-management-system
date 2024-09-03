@@ -60,7 +60,7 @@ const runAIScript = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     //     res.status(200).json({message: 'AI script executed successfully', output:stdout});
     // });
     try {
-        const python_api_url = 'https://ai-shift-calculation.onrender.com';
+        const python_api_url = process.env.AI_SCRIPT_URL;
         const endpoint = '/run-ai-script';
         const response = yield axios_1.default.post(`${python_api_url}${endpoint}`);
         res.status(200).json(response.data);

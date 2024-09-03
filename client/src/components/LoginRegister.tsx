@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 import { Role } from "../utils/roleUtils";
 
-const API_URL = process.env.REACT_APP_BASE_URL || "https://shift-management-system.onrender.com";
+const API_URL = process.env.REACT_APP_BASE_URL;
 
 const roleMapping:any = {
   1: Role.Admin,
