@@ -9,10 +9,14 @@ import tokenRouter from './routes/tokenRoutes'
 import roleRouter from './routes/roleRoutes'
 import shiftSetingsRouter from './routes/shiftSettingsRoute'
 
+
+const API_URL: string = process.env.VITE_API_URL as string;
+const APP_URL: string = process.env.VITE_APP_URL as string;
+
 const app = express();
 app.use(cors({
     credentials:true,
-    origin: ["https://shift-management-system.onrender.com/"]
+    origin: [API_URL, APP_URL]
 }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

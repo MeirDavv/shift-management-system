@@ -2,7 +2,7 @@ import {AppDispatch} from '../index'
 import axios from 'axios'
 import {login, setLoading, setMessage} from '../slices/authSlice'
 
-const API_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const loginUser = (credentials:{email:string,password:string}, navigate: Function) => async(dispatch:AppDispatch) => {
     try{

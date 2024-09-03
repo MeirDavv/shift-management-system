@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 import { Role } from "../utils/roleUtils";
 
-const API_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 const roleMapping:any = {
   1: Role.Admin,

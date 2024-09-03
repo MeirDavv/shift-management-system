@@ -61,7 +61,7 @@ const runAIScript = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     // });
     try {
         const python_api_url = process.env.AI_SCRIPT_URL;
-        const endpoint = '/run-ai-script';
+        const endpoint = '/api/run-ai-script';
         const response = yield axios_1.default.post(`${python_api_url}${endpoint}`);
         res.status(200).json(response.data);
     }

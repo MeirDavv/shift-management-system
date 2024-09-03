@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { UnavailabilityState } from "../interfaces/availability";
 
-const API_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Thunk to fetch updated unavailability
 export const fetchUnavailability = createAsyncThunk('unavailability/fetchUnavailability',

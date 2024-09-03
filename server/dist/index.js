@@ -13,10 +13,12 @@ const unavailabilityRouter_1 = __importDefault(require("./routes/unavailabilityR
 const tokenRoutes_1 = __importDefault(require("./routes/tokenRoutes"));
 const roleRoutes_1 = __importDefault(require("./routes/roleRoutes"));
 const shiftSettingsRoute_1 = __importDefault(require("./routes/shiftSettingsRoute"));
+const API_URL = process.env.VITE_API_URL;
+const APP_URL = process.env.VITE_APP_URL;
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     credentials: true,
-    origin: ["https://shift-management-system.onrender.com/"]
+    origin: [API_URL, APP_URL]
 }));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());

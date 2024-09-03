@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-const API_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface RunAIScriptButtonProps {
     onComplete: () => void; // Accept a callback function as a prop
@@ -9,7 +9,8 @@ interface RunAIScriptButtonProps {
 const RunAIScriptButton: React.FC<RunAIScriptButtonProps> = ({onComplete}) => {
     const runAIScript = async () => {
         try{
-            const response = await axios.post(`${API_URL}/api/run-ai-script`,{},{
+            const endpoint = '/api/run-ai-script'
+            const response = await axios.post(`${API_URL}${endpoint}`,{},{
                 withCredentials:true,  // Ensure cookies (containing JWT) are sent with the request
 
             });
