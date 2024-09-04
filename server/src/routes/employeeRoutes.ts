@@ -13,7 +13,7 @@ router.get("/user/logout", employeeController.logoutUser);
 
 
 router.get("/user/auth", verifyToken, employeeController.authUser);
-router.get("/user/all/names", employeeController.getAllUsersNames);
+router.get("/user/all/names", verifyToken, employeeController.getAllUsersNames);
 
 router.put('/user/:employeeId/role',employeeController.updateEmployeeRole)
 

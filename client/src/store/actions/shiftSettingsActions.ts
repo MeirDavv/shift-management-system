@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchShiftSettings = createAsyncThunk('shiftSetings/fetchShiftSettings', async () => {
     try{
-        const response = await axios.get<shiftSettings[]>(`${API_URL}/api/shiftSettings/all`);
+        const response = await axios.get<shiftSettings[]>(`${API_URL}/api/shiftSettings/all`,{withCredentials:true});
         console.log("response.data: ", response.data);
         return response.data;
     } catch (error){
@@ -22,7 +22,7 @@ export const updateShiftSettingsAction = createAsyncThunk(
     async ({shiftSettings}:{shiftSettings:shiftSettings}, {dispatch})=>{
         try {
             //update in the databsase
-            const response = await axios.put(`${API_URL}/api/shiftSettings/${shiftSettings.id}/update`, {newShiftSettings:shiftSettings});
+            const response = await axios.put(`${API_URL}/api/shiftSettings/${shiftSettings.id}/update`, {newShiftSettings:shiftSettings},{withCredentials:true});
 
             // update in redux
             dispatch(updateShiftSettings(shiftSettings));

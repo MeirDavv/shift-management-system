@@ -4,8 +4,8 @@ import verifyToken from "../middlewares/verifyToken";
 
 const router = express.Router();
 
-router.get('/shiftSettings/all', shiftSettingsController.getAllShiftSettings);
-router.put('/shiftSettings/:shiftId/update', shiftSettingsController.updateShiftSettings);
+router.get('/shiftSettings/all', verifyToken, shiftSettingsController.getAllShiftSettings);
+router.put('/shiftSettings/:shiftId/update', verifyToken, shiftSettingsController.updateShiftSettings);
 
 
 export default router;

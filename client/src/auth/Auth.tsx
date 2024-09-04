@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { AuthProps } from "../interfaces/Auth";
 import { Navigate } from "react-router-dom";
@@ -22,13 +22,16 @@ const Auth: React.FC<AuthProps> = ({ children }) => {
     (state: RootState) => state.auth.isAuthenticated
   );
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     verifyAuth();
   }, [dispatch]);
 
   const verifyAuth = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/user/auth`, {
+      const endpoint = '/api/user/auth';
+      const response = await axios.get(`${API_URL}${endpoint}`, {
         withCredentials: true,
       });
 
@@ -39,13 +42,16 @@ const Auth: React.FC<AuthProps> = ({ children }) => {
     } catch (error) {
       console.error(error);
     }
+    finally{
+      setLoading(false);
+    }
   };
 
-  if (isAuthenticated === null) {
+  if (loading) {
     return <div>Loading...</div>; // Show a loading spinner or message
   }
 
-  return isAuthenticated ? children : <Navigate to="/unauthorized" replace />;
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 export default Auth;

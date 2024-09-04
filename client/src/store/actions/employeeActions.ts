@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchEmployeesNames = createAsyncThunk('employees/fetchEmployeesNames', async () => {
     try{
-        const response = await axios.get(`${API_URL}/api/user/all/names`);
+        const response = await axios.get(`${API_URL}/api/user/all/names`,{withCredentials:true});
         console.log("response.data: ", response.data);
         return response.data;
     } catch (error){

@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const verifyAPIkey = (req, res, next) => {
-    var _a;
-    const apiKey = (_a = req.headers['authorization']) === null || _a === void 0 ? void 0 : _a.split(' ')[1]; // Assuming Bearer token format
+    const apiKey = req.headers['x-api-key'];
     if (apiKey === process.env.AI_API_KEY) {
         next(); // API is valid, procceed with request
     }

@@ -44,25 +44,20 @@ const updateShifts = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 // Route handler to trigger Pyhton script
 const runAIScript = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const scriptPath = path.join(__dirname,'../ai/shift_calculator.py');
-    // exec(`python3 ${scriptPath}`, {timeout: 5000}, (error, stdout, stderr)=>{
-    //     if(error){
-    //         console.error(`Execution error: ${error.message}`);
-    //         res.status(500).json({error:'Execution failed', details: error.message});
-    //         return;
-    //     }
-    //     if(stderr){
-    //         console.error(`stderr: ${stderr}`);
-    //         res.status(500).json({error: 'Script error', details: stderr});
-    //         return;
-    //     }
-    //     console.log(`stdout: ${stdout}`);
-    //     res.status(200).json({message: 'AI script executed successfully', output:stdout});
-    // });
     try {
         const python_api_url = process.env.AI_SCRIPT_URL;
         const endpoint = '/api/run-ai-script';
-        const response = yield axios_1.default.post(`${python_api_url}${endpoint}`);
+        const token = req.cookies['token'];
+        if (!token) {
+            res.status(401).json({ error: "No authorization token found in request" });
+            return;
+        }
+        const response = yield axios_1.default.post(`${python_api_url}${endpoint}`, {}, //No payload needed
+        {
+            headers: {
+                Authorization: `Bearer ${token}`, //Include the token in the Authorization header
+            }
+        });
         res.status(200).json(response.data);
     }
     catch (error) {

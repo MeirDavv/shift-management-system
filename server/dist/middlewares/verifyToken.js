@@ -11,7 +11,8 @@ if (!ACCESS_TOKEN_SECRET) {
     throw new Error("Access Token can't be accessed");
 }
 const verifyToken = (req, res, next) => {
-    const accessToken = req.cookies.token || req.headers["x-access-token"];
+    var _a;
+    const accessToken = req.cookies.token || ((_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(' ')[1]); // Assuming Bearer token format
     //console.log("accessToken => ", accessToken);
     if (!accessToken)
         return res.status(401).json({ message: "unauthorized" });

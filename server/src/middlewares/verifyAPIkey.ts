@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express';
 
 const verifyAPIkey = (req:Request, res: Response, next: NextFunction) => {
-    const apiKey = req.headers['authorization']?.split(' ')[1]; // Assuming Bearer token format
+    const apiKey = req.headers['x-api-key'];
 
     if (apiKey === process.env.AI_API_KEY){
         next(); // API is valid, procceed with request

@@ -12,7 +12,7 @@ if (!ACCESS_TOKEN_SECRET){
 }
 
 const verifyToken = (req:Request,res:Response,next:NextFunction) =>{
-    const accessToken = req.cookies.token || req.headers["x-access-token"];
+    const accessToken = req.cookies.token || req.headers["authorization"]?.split(' ')[1]; // Assuming Bearer token format
 
     //console.log("accessToken => ", accessToken);
 
