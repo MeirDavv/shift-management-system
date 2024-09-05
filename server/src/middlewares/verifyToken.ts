@@ -2,29 +2,32 @@ import jwt,{JwtPayload, TokenExpiredError} from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
 import {JwtPayload as CustomJwtPayload} from '../types/JwtPayload';
+import tokenController from '../controllers/tokenController';
+
 
 dotenv.config();
 
-const {ACCESS_TOKEN_SECRET} = process.env;
+const {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env;
 
-if (!ACCESS_TOKEN_SECRET){
+if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET){
     throw new Error("Access Token can't be accessed")
 }
 
 const verifyToken = (req:Request,res:Response,next:NextFunction) =>{
     const accessToken = req.cookies.token || req.headers["authorization"]?.split(' ')[1]; // Assuming Bearer token format
+    const refreshToken = req.cookies.refreshToken;
 
-    //console.log("accessToken => ", accessToken);
-
-    if(!accessToken) return res.status(401).json({message:"unauthorized"});
+    if(!accessToken) return res.status(401).json({message:"Unauthorized"});
 
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err: jwt.VerifyErrors | null, decode: string | JwtPayload | undefined) => {
         if(err){
             if (err instanceof TokenExpiredError){
-                return res.status(401).json({message:"Token expired", error: err.message});
-            }
-            return res.status(403).json({message:"forbidden", error:err.message});
+                // Call the refreshAccessToken function when access token is expired
+                return tokenController.refreshAccessToken(req,res);
+        } else{
+            return res.status(403).json({message:'Forbidden', error:err.message});
         }
+    }
 
         if(typeof decode === 'object' && decode!=null){
             const {userid,first_name,last_name,email,role_id} = decode as CustomJwtPayload;

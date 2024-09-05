@@ -28,23 +28,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importStar(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const tokenController_1 = __importDefault(require("../controllers/tokenController"));
 dotenv_1.default.config();
-const { ACCESS_TOKEN_SECRET } = process.env;
-if (!ACCESS_TOKEN_SECRET) {
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
     throw new Error("Access Token can't be accessed");
 }
 const verifyToken = (req, res, next) => {
     var _a;
     const accessToken = req.cookies.token || ((_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(' ')[1]); // Assuming Bearer token format
-    //console.log("accessToken => ", accessToken);
+    const refreshToken = req.cookies.refreshToken;
     if (!accessToken)
-        return res.status(401).json({ message: "unauthorized" });
+        return res.status(401).json({ message: "Unauthorized" });
     jsonwebtoken_1.default.verify(accessToken, ACCESS_TOKEN_SECRET, (err, decode) => {
         if (err) {
             if (err instanceof jsonwebtoken_1.TokenExpiredError) {
-                return res.status(401).json({ message: "Token expired", error: err.message });
+                // Call the refreshAccessToken function when access token is expired
+                return tokenController_1.default.refreshAccessToken(req, res);
             }
-            return res.status(403).json({ message: "forbidden", error: err.message });
+            else {
+                return res.status(403).json({ message: 'Forbidden', error: err.message });
+            }
         }
         if (typeof decode === 'object' && decode != null) {
             const { userid, first_name, last_name, email, role_id } = decode;
