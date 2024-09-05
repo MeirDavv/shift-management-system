@@ -8,4 +8,5 @@ const tokenController_1 = __importDefault(require("../controllers/tokenControlle
 const verifyToken_1 = __importDefault(require("../middlewares/verifyToken"));
 const router = express_1.default.Router();
 router.get('/token/:employee_id', verifyToken_1.default, tokenController_1.default.getJwtForEmployee);
+router.post('/refresh-token', tokenController_1.default.refreshAccessToken);
 exports.default = router;

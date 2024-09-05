@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { LoginRegisterProps } from "../interfaces/LoginRegister";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/authSlice";
 import { Role } from "../utils/roleUtils";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import apiClient from "../apiClient";
 
 const roleMapping:any = {
   1: Role.Admin,
@@ -35,9 +33,7 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
         : { first_name, last_name, email, password };
 
     try {
-      const response = await axios.post(`${API_URL}${endpoint}`, requestData, {
-        withCredentials: true,
-      });
+      const response = await apiClient.post(endpoint, requestData);
 
       console.log(response);
 

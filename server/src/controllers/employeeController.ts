@@ -95,7 +95,7 @@ const loginUser= async (req:Request, res:Response) => {
                 role_id: user.role_id
             },
             ACCESS_TOKEN_SECRET,
-            {expiresIn: "10m"}
+            {expiresIn: "5s"}
         );
 
         const refreshToken = jwt.sign(
@@ -114,7 +114,7 @@ const loginUser= async (req:Request, res:Response) => {
         res.cookie("token", accessToken, {
             httpOnly: true,
             //secure:
-            maxAge: 60*10*1000, //10 minutes
+            maxAge: 5*1000, //5 seconds
         })
 
         res.cookie("refresh",refreshToken, {

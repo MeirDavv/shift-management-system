@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { UnavailabilityState } from "../interfaces/availability";
+import apiClient from "../../apiClient";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -8,7 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const fetchUnavailability = createAsyncThunk('unavailability/fetchUnavailability',
     async (_, {rejectWithValue}) => {
         try{
-            const response = await axios.get(`${API_URL}/api/unavailability`,{withCredentials: true});
+            const endpoint = '/api/unavailability';
+            const response = await apiClient.get(endpoint);
             return response.data;
         }catch(error:any){
             rejectWithValue(error.response.data);
@@ -32,7 +33,8 @@ export const submitUnavailability = createAsyncThunk('unavailability/submitUnava
         console.log("Data being sent to backend:", updates); // Log the data
 
         try {
-            const response = await axios.post(`${API_URL}/api/unavailability`, updates, {withCredentials:true});
+            const endpoint = '/api/unavailability'
+            const response = await apiClient.post(endpoint, updates);
             return response.data || 'Update successful';
         } catch (error:any){
             return rejectWithValue(error.response.data);

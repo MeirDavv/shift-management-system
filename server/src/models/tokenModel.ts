@@ -42,4 +42,16 @@ const getTokenByEmployeeId = async (employeeId: number): Promise<{access_token:s
     }
 };
 
-export default {upsertToken, getTokenByEmployeeId};
+const updateAccessToken = async (employeeId: number, accessToken:string, accessTokenExpiresAt: Date): Promise<number> => {
+    try{
+        const affectedRows = await db(TABLE_NAME)
+        .update({access_token: accessToken, access_token_expires_at: accessTokenExpiresAt})
+        .where({employee_id:employeeId});
+        return affectedRows;
+    } catch(error){
+        console.error(`Error updating access token for employee ID ${employeeId}`, error);
+        throw error;
+    }
+}
+
+export default {upsertToken, getTokenByEmployeeId, updateAccessToken};

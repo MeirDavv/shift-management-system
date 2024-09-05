@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import apiClient from "../../apiClient";
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchShifts = createAsyncThunk('shifts/fetchShifts', async () => {
     try{
-        const response = await axios.get(`${API_URL}/api/shifts`,{withCredentials:true});
+        const endpoint = '/api/shifts';
+        const response = await apiClient.get(endpoint);
         console.log("response.data: ", response.data);
         return response.data;
     } catch (error){

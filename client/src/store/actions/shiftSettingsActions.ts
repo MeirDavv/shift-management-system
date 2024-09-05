@@ -1,14 +1,16 @@
-import axios from 'axios';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {shiftSettings} from '../interfaces/shiftSettings'
 import { updateShiftSettings } from '../slices/shiftSettingsSlice';
+import apiClient from '../../apiClient';
 
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchShiftSettings = createAsyncThunk('shiftSetings/fetchShiftSettings', async () => {
     try{
-        const response = await axios.get<shiftSettings[]>(`${API_URL}/api/shiftSettings/all`,{withCredentials:true});
+        const endpoint = '/api/shiftSettings/all';
+        const response = await apiClient.get<shiftSettings[]>(endpoint);
         console.log("response.data: ", response.data);
         return response.data;
     } catch (error){
@@ -22,7 +24,8 @@ export const updateShiftSettingsAction = createAsyncThunk(
     async ({shiftSettings}:{shiftSettings:shiftSettings}, {dispatch})=>{
         try {
             //update in the databsase
-            const response = await axios.put(`${API_URL}/api/shiftSettings/${shiftSettings.id}/update`, {newShiftSettings:shiftSettings},{withCredentials:true});
+            const endpoint = `/api/shiftSettings/${shiftSettings.id}/update`;
+            const response = await apiClient.put(endpoint, {newShiftSettings:shiftSettings});
 
             // update in redux
             dispatch(updateShiftSettings(shiftSettings));

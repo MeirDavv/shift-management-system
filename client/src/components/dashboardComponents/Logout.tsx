@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../../apiClient";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,9 +9,7 @@ export const Logout = () => {
   const logoutUser = async () => {
     try {
       const endpoint: string = "/api/user/logout";
-      const res = await axios.get(`${API_URL}${endpoint}`, {
-        withCredentials: true,
-      });
+      const res = await apiClient.get(endpoint);
       console.log(res);
       if (res.status === 200) {
         // Redirect to login or home page after logout

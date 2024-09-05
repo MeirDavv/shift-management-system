@@ -1,14 +1,13 @@
-import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Role } from '../interfaces/role';
 import { updateRoleEmployee } from '../slices/employeeSlice';
+import apiClient from '../../apiClient';
 
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchRoles = createAsyncThunk('roles/fetchRoles', async () => {
     try{
-        const response = await axios.get(`${API_URL}/api/roles/all/names`,{withCredentials:true});
+        const endpoint = '/api/roles/all/names';
+        const response = await apiClient.get(endpoint);
         console.log("response.data: ", response.data);
         return response.data;
     } catch (error){
@@ -22,7 +21,8 @@ export const updateEmployeeRole = createAsyncThunk(
     async ({employeeIdNumber,roleId}:{employeeIdNumber:number,roleId:number}, {dispatch})=>{
         try {
             //update in the databsase
-            const response = await axios.put(`${API_URL}/api/user/${employeeIdNumber}/role`, {roleId},{withCredentials:true});
+            const endpoint = `/api/user/${employeeIdNumber}/role`;
+            const response = await apiClient.put(endpoint, {roleId});
 
             // update in redux
             dispatch(updateRoleEmployee({employeeId:employeeIdNumber, roleId:roleId}));

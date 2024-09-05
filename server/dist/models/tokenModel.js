@@ -47,4 +47,16 @@ const getTokenByEmployeeId = (employeeId) => __awaiter(void 0, void 0, void 0, f
         throw error;
     }
 });
-exports.default = { upsertToken, getTokenByEmployeeId };
+const updateAccessToken = (employeeId, accessToken, accessTokenExpiresAt) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const affectedRows = yield (0, db_1.db)(TABLE_NAME)
+            .update({ access_token: accessToken, access_token_expires_at: accessTokenExpiresAt })
+            .where({ employee_id: employeeId });
+        return affectedRows;
+    }
+    catch (error) {
+        console.error(`Error updating access token for employee ID ${employeeId}`, error);
+        throw error;
+    }
+});
+exports.default = { upsertToken, getTokenByEmployeeId, updateAccessToken };

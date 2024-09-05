@@ -1,4 +1,4 @@
-import jwt,{JwtPayload} from 'jsonwebtoken';
+import jwt,{JwtPayload, TokenExpiredError} from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Request, Response, NextFunction } from 'express';
 import {JwtPayload as CustomJwtPayload} from '../types/JwtPayload';
@@ -19,8 +19,12 @@ const verifyToken = (req:Request,res:Response,next:NextFunction) =>{
     if(!accessToken) return res.status(401).json({message:"unauthorized"});
 
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err: jwt.VerifyErrors | null, decode: string | JwtPayload | undefined) => {
-        if(err)
+        if(err){
+            if (err instanceof TokenExpiredError){
+                return res.status(401).json({message:"Token expired", error: err.message});
+            }
             return res.status(403).json({message:"forbidden", error:err.message});
+        }
 
         if(typeof decode === 'object' && decode!=null){
             const {userid,first_name,last_name,email,role_id} = decode as CustomJwtPayload;

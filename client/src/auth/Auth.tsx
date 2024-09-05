@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { AuthProps } from "../interfaces/Auth";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { login } from "../store/slices/authSlice";
 import { Role } from "../utils/roleUtils";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import apiClient from "../apiClient";
 
 const roleMapping:any = {
   1: Role.Admin,
@@ -31,9 +29,7 @@ const Auth: React.FC<AuthProps> = ({ children }) => {
   const verifyAuth = async () => {
     try {
       const endpoint = '/api/user/auth';
-      const response = await axios.get(`${API_URL}${endpoint}`, {
-        withCredentials: true,
-      });
+      const response = await apiClient.get(endpoint);
 
       if (response.status === 200) {
         const role = roleMapping[response.data.role_id]; // Map role_id to Role
