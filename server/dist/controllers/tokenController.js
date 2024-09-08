@@ -35,6 +35,7 @@ const getJwtForEmployee = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 const refreshAccessToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Reaches refreshAccessToken");
     const { REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET } = process.env;
     if (!REFRESH_TOKEN_SECRET || !ACCESS_TOKEN_SECRET) {
         return res.status(500).json({ message: 'Token secrets are not defined' });
@@ -54,13 +55,14 @@ const refreshAccessToken = (req, res) => __awaiter(void 0, void 0, void 0, funct
         }
         // Generate a new access token
         const newAccessToken = jsonwebtoken_1.default.sign({ userid, first_name, last_name, email, role_id }, ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+        console.log(newAccessToken);
         const accessTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
         // Update the access token in the database
         yield tokenModel_1.default.updateAccessToken(userid, newAccessToken, accessTokenExpiresAt);
         // Set the new access token in cookies
         res.cookie("token", newAccessToken, {
             httpOnly: true,
-            maxAge: 5 * 1000 // 5 seconds 
+            maxAge: 10 * 60 * 1000 // 10 minutes 
         });
         res.json({
             message: "New access token generated successfully",

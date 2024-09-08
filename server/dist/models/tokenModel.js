@@ -34,6 +34,18 @@ const upsertToken = (employeeId, accessToken, accessTokenExpiresAt, refreshToken
         throw error;
     }
 });
+const removeTokens = (employeeId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const deletedRows = yield (0, db_1.db)(TABLE_NAME)
+            .where({ employee_id: employeeId })
+            .del();
+        return deletedRows;
+    }
+    catch (error) {
+        console.error(`Error removing tokens for employee ID ${employeeId}`, error);
+        throw error;
+    }
+});
 const getTokenByEmployeeId = (employeeId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tokenData = yield (0, db_1.db)(TABLE_NAME)
@@ -59,4 +71,4 @@ const updateAccessToken = (employeeId, accessToken, accessTokenExpiresAt) => __a
         throw error;
     }
 });
-exports.default = { upsertToken, getTokenByEmployeeId, updateAccessToken };
+exports.default = { upsertToken, removeTokens, getTokenByEmployeeId, updateAccessToken };

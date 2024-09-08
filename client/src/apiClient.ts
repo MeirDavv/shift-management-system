@@ -1,4 +1,6 @@
 import axios from "axios";
+import store from "./store";
+import { updateToken } from "./store/slices/authSlice";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,6 +23,9 @@ apiClient.interceptors.response.use(
             try{
                 // Atteempt to refresh the token
                 const {data} = await axios.post (`${API_URL}/api/refresh-token`, {}, {withCredentials:true});
+
+                // Set the new access token in the Redux store
+                store.dispatch(updateToken(data.accessToken))
 
                 // Set the new access token to headers for future requests
                 apiClient.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;

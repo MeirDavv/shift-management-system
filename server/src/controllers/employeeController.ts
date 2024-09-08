@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import { Employee, EmployeeIdAndName } from "../types/Employee";
 import tokenModel from "../models/tokenModel";
 import { hashPassword, isPasswordMatch } from "./utils";
+import { CustomRequest } from "../types/customRequest";
 
 dotenv.config();
 
@@ -142,18 +143,26 @@ const loginUser= async (req:Request, res:Response) => {
     }
 }
 
-const logoutUser = async (req:Request,res:Response) => {
+const logoutUser = async (req:CustomRequest,res:Response) => {
     const options = {
         httpOnly: true,
         //secure:
         maxAge: 0, //delete immediately
     }
     res.cookie('token','expiredToken', options);
+    res.cookie('refresh', 'expiredToken', options);    // Clear refresh token
+    
+    // Remove the tokens from the database using the employee's ID
+    const deletedRows = await tokenModel.removeTokens(req.userid);
+    console.log(`Deleted ${deletedRows} token(s) for employee ID ${req.userid}`);
+    
+    
     res.status(200).json({status: "success"});
 }
 
-const authUser = async (req:Request, res:Response) => {
+const authUser = async (req:CustomRequest, res:Response) => {
     res.status(200).json({
+        token: req.token,
         email: req.email,
         userid: req.userid,
         first_name: req.first_name,

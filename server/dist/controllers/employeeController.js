@@ -137,10 +137,15 @@ const logoutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         maxAge: 0, //delete immediately
     };
     res.cookie('token', 'expiredToken', options);
+    res.cookie('refresh', 'expiredToken', options); // Clear refresh token
+    // Remove the tokens from the database using the employee's ID
+    const deletedRows = yield tokenModel_1.default.removeTokens(req.userid);
+    console.log(`Deleted ${deletedRows} token(s) for employee ID ${req.userid}`);
     res.status(200).json({ status: "success" });
 });
 const authUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({
+        token: req.token,
         email: req.email,
         userid: req.userid,
         first_name: req.first_name,

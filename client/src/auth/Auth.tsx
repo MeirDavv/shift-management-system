@@ -4,15 +4,9 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { login } from "../store/slices/authSlice";
-import { Role } from "../utils/roleUtils";
 import apiClient from "../apiClient";
+import { roleMap } from "../utils/roleUtils";
 
-const roleMapping:any = {
-  1: Role.Admin,
-  2: Role.Manager,
-  3: Role.Worker,
-  // Add other mappings as needed
-};
 
 const Auth: React.FC<AuthProps> = ({ children }) => {
   const dispatch = useDispatch();
@@ -32,8 +26,8 @@ const Auth: React.FC<AuthProps> = ({ children }) => {
       const response = await apiClient.get(endpoint);
 
       if (response.status === 200) {
-        const role = roleMapping[response.data.role_id]; // Map role_id to Role
-        dispatch(login({email: response.data.email, role: role}));
+        const role = roleMap[response.data.role_id]; // Map role_id to Role
+        dispatch(login({token:response.data.token, email: response.data.email, role: role}));
       }
     } catch (error) {
       console.error(error);

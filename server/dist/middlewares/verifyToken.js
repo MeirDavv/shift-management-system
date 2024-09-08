@@ -37,16 +37,25 @@ if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
 const verifyToken = (req, res, next) => {
     var _a;
     const accessToken = req.cookies.token || ((_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(' ')[1]); // Assuming Bearer token format
-    const refreshToken = req.cookies.refreshToken;
-    if (!accessToken)
+    const refreshToken = req.cookies.refresh;
+    console.log("Refresh token:", refreshToken);
+    console.log("Access Token from Cookies or Header: ", accessToken);
+    if (!accessToken) {
+        if (refreshToken) {
+            console.log("Access token missing, attempting to refresh");
+            return tokenController_1.default.refreshAccessToken(req, res);
+        }
         return res.status(401).json({ message: "Unauthorized" });
+    }
     jsonwebtoken_1.default.verify(accessToken, ACCESS_TOKEN_SECRET, (err, decode) => {
         if (err) {
+            console.log("JWT Error: ", err);
             if (err instanceof jsonwebtoken_1.TokenExpiredError) {
                 // Call the refreshAccessToken function when access token is expired
                 return tokenController_1.default.refreshAccessToken(req, res);
             }
             else {
+                console.log("JWT Error other than expiration: ", err); // Log other errors
                 return res.status(403).json({ message: 'Forbidden', error: err.message });
             }
         }
@@ -57,6 +66,7 @@ const verifyToken = (req, res, next) => {
             req.last_name = last_name;
             req.email = email;
             req.role_id = role_id;
+            req.token = accessToken;
         }
         next();
     });

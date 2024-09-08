@@ -1,15 +1,23 @@
 import {AppDispatch} from '../index'
 import {login, setLoading, setMessage} from '../slices/authSlice'
 import apiClient from '../../apiClient';
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { roleMap } from '../../utils/roleUtils';
 
 export const loginUser = (credentials:{email:string,password:string}, navigate: Function) => async(dispatch:AppDispatch) => {
     try{
         dispatch(setLoading(true));
         const endpoint = '/api/user/login';
         const response = await apiClient.post(endpoint,credentials);
-        dispatch(login(response.data.user.email));
+
+        const {accessToken, user} = response.data;
+
+        const role = roleMap[user.role_id];
+
+        dispatch(login({
+            token: accessToken,
+            email: user.email,
+            role: role
+        }));
         navigate("/dashboard");
     } catch(error:any){
         dispatch(setMessage(error.response?.data?.message || "An error occurred. Please try again."));

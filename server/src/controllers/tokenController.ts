@@ -27,6 +27,7 @@ const getJwtForEmployee = async (req:Request, res: Response) =>{
 }
 
 const refreshAccessToken = async (req: Request, res: Response) => {
+    console.log("Reaches refreshAccessToken");
     const {REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET} = process.env;
 
     if (!REFRESH_TOKEN_SECRET || !ACCESS_TOKEN_SECRET){
@@ -59,6 +60,8 @@ const refreshAccessToken = async (req: Request, res: Response) => {
             {expiresIn: '10m'}
         );
 
+        console.log(newAccessToken);
+
         const accessTokenExpiresAt = new Date(Date.now() + 10*60*1000); // 10 minutes
 
         // Update the access token in the database
@@ -67,7 +70,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
         // Set the new access token in cookies
         res.cookie("token", newAccessToken, {
             httpOnly:true,
-            maxAge: 5* 1000 // 5 seconds 
+            maxAge: 10 * 60 * 1000 // 10 minutes 
         });
 
         res.json({

@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../apiClient";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { logout } from "../../store/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 export const Logout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const logoutUser = async () => {
     try {
@@ -12,6 +13,9 @@ export const Logout = () => {
       const res = await apiClient.get(endpoint);
       console.log(res);
       if (res.status === 200) {
+        // Dispatch the logout action to clear the Redux state
+        dispatch(logout());
+        
         // Redirect to login or home page after logout
         navigate("/login");
       }

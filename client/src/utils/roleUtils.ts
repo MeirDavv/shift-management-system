@@ -13,3 +13,9 @@ const roleHierarchy = {
 export const hasAccess = (userRole: Role, requiredRole: Role) : boolean => {
     return roleHierarchy[userRole] <= roleHierarchy[requiredRole];
 };
+
+export const roleMap: { [key: number]: Role} = {
+    1: Role.Admin,
+    2: Role.Manager,
+    3: Role.Worker
+}

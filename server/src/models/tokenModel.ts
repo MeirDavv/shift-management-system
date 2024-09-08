@@ -28,6 +28,18 @@ const upsertToken = async(employeeId:number, accessToken: string,accessTokenExpi
     }
 }
 
+const removeTokens = async (employeeId:number):Promise<number> => {
+    try{
+        const deletedRows = await db(TABLE_NAME)
+        .where({employee_id:employeeId})
+        .del();
+        return deletedRows;
+    } catch(error){
+        console.error(`Error removing tokens for employee ID ${employeeId}`, error);
+        throw error;
+    }
+}
+
 const getTokenByEmployeeId = async (employeeId: number): Promise<{access_token:string, refresh_token:string} | null> => {
     try{
         const tokenData = await db(TABLE_NAME)
@@ -54,4 +66,4 @@ const updateAccessToken = async (employeeId: number, accessToken:string, accessT
     }
 }
 
-export default {upsertToken, getTokenByEmployeeId, updateAccessToken};
+export default {upsertToken, removeTokens, getTokenByEmployeeId, updateAccessToken};
