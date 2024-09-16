@@ -28,7 +28,7 @@ const upsertToken = async(employeeId:number, accessToken: string,accessTokenExpi
     }
 }
 
-const removeTokens = async (employeeId:number):Promise<number> => {
+const removeTokens = async (employeeId:number | undefined):Promise<number> => {
     try{
         const deletedRows = await db(TABLE_NAME)
         .where({employee_id:employeeId})

@@ -28,6 +28,7 @@ const getJwtForEmployee = async (req:Request, res: Response) =>{
 
 const refreshAccessToken = async (req: Request, res: Response) => {
     console.log("Reaches refreshAccessToken");
+
     const {REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET} = process.env;
 
     if (!REFRESH_TOKEN_SECRET || !ACCESS_TOKEN_SECRET){
@@ -60,8 +61,6 @@ const refreshAccessToken = async (req: Request, res: Response) => {
             {expiresIn: '10m'}
         );
 
-        console.log(newAccessToken);
-
         const accessTokenExpiresAt = new Date(Date.now() + 10*60*1000); // 10 minutes
 
         // Update the access token in the database
@@ -73,13 +72,11 @@ const refreshAccessToken = async (req: Request, res: Response) => {
             maxAge: 10 * 60 * 1000 // 10 minutes 
         });
 
-        res.json({
-            message:"New access token generated successfully",
-            accessToken:newAccessToken
-        });
+        return true; // Return success to the calling function
+
     } catch(error) {
         console.log("Error verifying refresh token:",error);
-        res.status(403).json({message: "Invalid refresh token"});
+        return false; // Return failure if refresh process fails
     }
 };
 

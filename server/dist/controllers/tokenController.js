@@ -55,7 +55,6 @@ const refreshAccessToken = (req, res) => __awaiter(void 0, void 0, void 0, funct
         }
         // Generate a new access token
         const newAccessToken = jsonwebtoken_1.default.sign({ userid, first_name, last_name, email, role_id }, ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
-        console.log(newAccessToken);
         const accessTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
         // Update the access token in the database
         yield tokenModel_1.default.updateAccessToken(userid, newAccessToken, accessTokenExpiresAt);
@@ -64,14 +63,11 @@ const refreshAccessToken = (req, res) => __awaiter(void 0, void 0, void 0, funct
             httpOnly: true,
             maxAge: 10 * 60 * 1000 // 10 minutes 
         });
-        res.json({
-            message: "New access token generated successfully",
-            accessToken: newAccessToken
-        });
+        return true; // Return success to the calling function
     }
     catch (error) {
         console.log("Error verifying refresh token:", error);
-        res.status(403).json({ message: "Invalid refresh token" });
+        return false; // Return failure if refresh process fails
     }
 });
 exports.default = { getJwtForEmployee, refreshAccessToken };

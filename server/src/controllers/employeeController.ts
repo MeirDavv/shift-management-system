@@ -155,10 +155,9 @@ const logoutUser = async (req:CustomRequest,res:Response) => {
     // Remove the tokens from the database using the employee's ID
     const deletedRows = await tokenModel.removeTokens(req.userid);
     console.log(`Deleted ${deletedRows} token(s) for employee ID ${req.userid}`);
-    
-    
     res.status(200).json({status: "success"});
-}
+
+    }
 
 const authUser = async (req:CustomRequest, res:Response) => {
     res.status(200).json({

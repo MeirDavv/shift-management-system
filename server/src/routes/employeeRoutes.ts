@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post("/user/register", employeeController.registerUser);
 router.post("/user/login", employeeController.loginUser);
-router.get("/user/logout", employeeController.logoutUser);
+router.get("/user/logout", verifyToken, employeeController.logoutUser);
 
 
 router.get("/user/auth", verifyToken, employeeController.authUser);
