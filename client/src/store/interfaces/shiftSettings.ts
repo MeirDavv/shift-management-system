@@ -4,7 +4,8 @@ export interface shiftSettings {
     start_time: string,
     end_time: string,
     min_employee_count: number,
-    max_employee_count: number
+    max_employee_count: number,
+    organization_id:number,
 }
 
 export interface ShiftSettingsState {

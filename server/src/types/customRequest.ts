@@ -6,5 +6,6 @@ export interface CustomRequest extends Request {
     email?: string;
     first_name?: string;
     last_name?: string;
+    organization_id?:number;
     role_id?: number;
 }

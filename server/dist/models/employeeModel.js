@@ -8,19 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../config/db");
+const asyncLocalStorage_1 = __importDefault(require("../context/asyncLocalStorage"));
 const TABLE_NAME = 'employees';
 const AWAITING_FOR_APPROVAL_ROLE_ID = 4;
 const create = (employeeInfo) => __awaiter(void 0, void 0, void 0, function* () {
-    const { first_name, last_name, email, password_hash } = employeeInfo;
+    const { first_name, last_name, organization_id, email, password_hash } = employeeInfo;
     console.log(password_hash);
     const trx = yield db_1.db.transaction(); //using transaction so that if we fail to insert it will rollback
     try {
         //Hash the password
         const [employee] = yield trx(TABLE_NAME)
-            .insert({ first_name, last_name, email, password_hash, role_id: AWAITING_FOR_APPROVAL_ROLE_ID
-        }, ['email', 'first_name', 'last_name']);
+            .insert({ first_name, last_name, organization_id, email, password_hash, role_id: AWAITING_FOR_APPROVAL_ROLE_ID
+        }, ['email', 'first_name', 'last_name', 'organization_id']);
         yield trx.commit();
         return employee;
     }
@@ -32,8 +36,13 @@ const create = (employeeInfo) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const getAllNames = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const store = asyncLocalStorage_1.default.getStore();
+        if (!store || !store.organization_id) {
+            throw new Error("organization_id is missing");
+        }
         const employees = yield (0, db_1.db)(TABLE_NAME)
-            .select("id", "first_name", "last_name", "role_id");
+            .select("id", "first_name", "last_name", "organization_id", "role_id")
+            .where({ organization_id: store.organization_id });
         return employees;
     }
     catch (error) {
@@ -41,10 +50,17 @@ const getAllNames = () => __awaiter(void 0, void 0, void 0, function* () {
         throw error;
     }
 });
+const getOrganizationId = () => __awaiter(void 0, void 0, void 0, function* () {
+    const store = asyncLocalStorage_1.default.getStore();
+    if (!store || !store.organization_id) {
+        throw new Error("organization_id is missing");
+    }
+    return store.organization_id;
+});
 const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const [employee] = yield (0, db_1.db)(TABLE_NAME)
-            .select("id", "first_name", "last_name", "email", "password_hash", "role_id")
+            .select("id", "first_name", "last_name", "organization_id", "email", "password_hash", "role_id")
             .where({ id });
         return employee || null;
     }
@@ -57,7 +73,7 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const getByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const [employee] = yield (0, db_1.db)(TABLE_NAME)
-            .select("id", "first_name", "last_name", "email", "password_hash", "role_id")
+            .select("id", "first_name", "last_name", "organization_id", "email", "password_hash", "role_id")
             .where({ email });
         return employee || null;
     }
@@ -131,4 +147,4 @@ const updateEmployeeRole = (employeeId, roleId) => __awaiter(void 0, void 0, voi
         throw error;
     }
 });
-exports.default = { create, getAllNames, getById, getByEmail, update, deleteEmployee, updateEmployeeRole };
+exports.default = { create, getAllNames, getOrganizationId, getById, getByEmail, update, deleteEmployee, updateEmployeeRole };

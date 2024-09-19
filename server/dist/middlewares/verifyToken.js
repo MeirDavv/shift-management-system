@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importStar(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const tokenController_1 = __importDefault(require("../controllers/tokenController"));
+const asyncLocalStorage_1 = __importDefault(require("../context/asyncLocalStorage"));
 dotenv_1.default.config();
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
@@ -87,16 +88,27 @@ const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             }
             else {
                 if (typeof decode === 'object' && decode != null) {
-                    const { userid, first_name, last_name, email, role_id } = decode;
+                    const { userid, first_name, last_name, organization_id, email, role_id } = decode;
+                    // Ensure organization_id is defined and is a number
+                    if (typeof organization_id !== 'number') {
+                        return res.status(400).json({ message: 'Invalid or missing organization_id' });
+                    }
                     req.userid = userid;
                     req.first_name = first_name;
                     req.last_name = last_name;
+                    req.organization_id = organization_id;
                     req.email = email;
                     req.role_id = role_id;
                     req.token = accessToken;
                     console.log("Decoded User ID:", req.userid); // Log User ID
+                    // Use asyncLocalStorage to store the organization_id for the duration of the request
+                    asyncLocalStorage_1.default.run({ organization_id: req.organization_id }, () => {
+                        next(); //Token is verified, move forward
+                    });
                 }
-                next(); //Token is verified, move forward
+                else {
+                    return res.status(403).json({ message: 'Forbidden, invalid token structure' });
+                }
             }
         });
     }

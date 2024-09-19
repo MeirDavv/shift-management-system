@@ -20,11 +20,21 @@ const getAllUsersNames = async (req:Request,res:Response): Promise<void> => {
     }
 }
 
+const getOrganizationId = async(req:Request, res:Response): Promise<void> => {
+    try{
+        const organization_id : number | null = await employeeModel.getOrganizationId(); 
+        res.status(200).json(organization_id);
+    } catch(error){
+        console.error(error);
+        throw error;
+    }
+}
+
 const registerUser= async (req:Request,res:Response): Promise<void> => {
     try{
         
     // Destructure the necessary fields from req.body
-    const { first_name, last_name, email, password } = req.body;
+    const { first_name, last_name, organization_id, email, password } = req.body;
 
     // Hash the plain text password
     const password_hash = await hashPassword(password);
@@ -33,6 +43,7 @@ const registerUser= async (req:Request,res:Response): Promise<void> => {
     const user:Employee = {
         first_name,
         last_name,
+        organization_id,
         email,
         password_hash
     }
@@ -92,11 +103,12 @@ const loginUser= async (req:Request, res:Response) => {
                 userid: user.id, 
                 first_name: user.first_name,
                 last_name:user.last_name,
+                organization_id: user.organization_id,
                 email: user.email,
                 role_id: user.role_id
             },
             ACCESS_TOKEN_SECRET,
-            {expiresIn: "5s"}
+            {expiresIn: "10min"}
         );
 
         const refreshToken = jwt.sign(
@@ -104,6 +116,7 @@ const loginUser= async (req:Request, res:Response) => {
                 userid: user.id, 
                 first_name: user.first_name,
                 last_name:user.last_name,
+                organization_id: user.organization_id,
                 email: user.email,
                 role_id: user.role_id
             },
@@ -115,7 +128,7 @@ const loginUser= async (req:Request, res:Response) => {
         res.cookie("token", accessToken, {
             httpOnly: true,
             //secure:
-            maxAge: 5*1000, //5 seconds
+            maxAge: 10*60*1000, //10 mins
         })
 
         res.cookie("refresh",refreshToken, {
@@ -124,7 +137,7 @@ const loginUser= async (req:Request, res:Response) => {
             maxAge: 3 * 24 * 60 * 60 * 1000 //3 days
         });
 
-        const accessTokenExpiresAt = new Date(Date.now() + 60 * 1000); // 60 seconds
+        const accessTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
         const refreshTokenExpiresAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days
 
         await tokenModel.upsertToken(user.id, accessToken,accessTokenExpiresAt,refreshToken,refreshTokenExpiresAt );
@@ -191,4 +204,4 @@ const updateEmployeeRole = async (req:Request, res:Response) => {
 }
 
 
-export default {getAllUsersNames, registerUser,loginUser, logoutUser, authUser,updateEmployeeRole};
+export default {getAllUsersNames, getOrganizationId, registerUser,loginUser, logoutUser, authUser,updateEmployeeRole};

@@ -1,13 +1,15 @@
 import {db} from '../config/db';
 import bcrypt from 'bcrypt';
 import { Employee, EmployeeIdAndName } from '../types/Employee';
+import asyncLocalStorage from "../context/asyncLocalStorage";
+
 
 const TABLE_NAME:string = 'employees'
 
 const AWAITING_FOR_APPROVAL_ROLE_ID = 4
 
 const create = async (employeeInfo:Employee):Promise<Partial<Employee>> =>{
-    const {first_name, last_name, email, password_hash } = employeeInfo;
+    const {first_name, last_name, organization_id, email, password_hash } = employeeInfo;
 
     console.log(password_hash);
     const trx = await db.transaction(); //using transaction so that if we fail to insert it will rollback
@@ -15,9 +17,9 @@ const create = async (employeeInfo:Employee):Promise<Partial<Employee>> =>{
     try{
         //Hash the password
         const [employee] = await trx(TABLE_NAME)
-        .insert({first_name,last_name,email,password_hash, role_id:AWAITING_FOR_APPROVAL_ROLE_ID
+        .insert({first_name,last_name, organization_id, email,password_hash, role_id:AWAITING_FOR_APPROVAL_ROLE_ID
         },
-            ['email','first_name','last_name']
+            ['email','first_name','last_name','organization_id']
         );
         await trx.commit();
         return employee;
@@ -31,8 +33,14 @@ const create = async (employeeInfo:Employee):Promise<Partial<Employee>> =>{
 
 const getAllNames = async (): Promise<EmployeeIdAndName[]> => {
     try{
+        const store = asyncLocalStorage.getStore(); 
+
+        if(!store || !store.organization_id){
+            throw new Error ("organization_id is missing");
+        }
         const employees:EmployeeIdAndName[] = await db(TABLE_NAME)
-        .select("id","first_name","last_name","role_id");
+        .select("id","first_name","last_name","organization_id","role_id")
+        .where({organization_id:store.organization_id});
         return employees;  
     } catch(error){
         console.error(error);
@@ -40,11 +48,20 @@ const getAllNames = async (): Promise<EmployeeIdAndName[]> => {
     }
 }
 
+const getOrganizationId = async(): Promise<number> => {
+    const store = asyncLocalStorage.getStore(); 
+
+    if(!store || !store.organization_id){
+        throw new Error ("organization_id is missing");
+    }
+    return store.organization_id;
+}
+
 
 const getById = async (id:number): Promise<Employee | null> => {
     try{
         const [employee] = await db(TABLE_NAME)
-        .select("id","first_name","last_name","email","password_hash","role_id")
+        .select("id","first_name","last_name","organization_id","email","password_hash","role_id")
         .where({id});
         return employee || null;
     } catch(error){
@@ -56,7 +73,7 @@ const getById = async (id:number): Promise<Employee | null> => {
 const getByEmail = async (email:string): Promise<Employee | null> => {
     try{
         const [employee] = await db(TABLE_NAME)
-        .select("id","first_name","last_name","email","password_hash","role_id")
+        .select("id","first_name","last_name","organization_id","email","password_hash","role_id")
         .where({email});
         return employee || null;
     } catch(error){
@@ -141,4 +158,4 @@ const updateEmployeeRole = async (employeeId:number, roleId: number) => {
     }
 }
 
-export default {create, getAllNames,getById,getByEmail,update,deleteEmployee, updateEmployeeRole}
+export default {create, getAllNames, getOrganizationId, getById,getByEmail,update,deleteEmployee, updateEmployeeRole}

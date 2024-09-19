@@ -1,12 +1,20 @@
 import { db } from "../config/db";
 import { shiftSettings } from "../types/ShiftSettings";
+import asyncLocalStorage from "../context/asyncLocalStorage";
+
 
 const TABLE_NAME = 'shifts';
 
 const getAll = async ():Promise<shiftSettings[]> => {
     try{
+        const store = asyncLocalStorage.getStore(); 
+
+        if(!store || !store.organization_id){
+            throw new Error ("organization_id is missing");
+        }
         const shiftSettings:shiftSettings[] = await db(TABLE_NAME)
         .select("id", "name", "start_time","end_time","min_employee_count","max_employee_count")
+        .where({organization_id:store.organization_id})
         .orderBy("id");
         return shiftSettings;
     } catch(error){

@@ -39,16 +39,27 @@ const getAllUsersNames = (req, res) => __awaiter(void 0, void 0, void 0, functio
         throw error;
     }
 });
+const getOrganizationId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const organization_id = yield employeeModel_1.default.getOrganizationId();
+        res.status(200).json(organization_id);
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+});
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Destructure the necessary fields from req.body
-        const { first_name, last_name, email, password } = req.body;
+        const { first_name, last_name, organization_id, email, password } = req.body;
         // Hash the plain text password
         const password_hash = yield (0, utils_1.hashPassword)(password);
         // Create a user object that matches the Employee interface
         const user = {
             first_name,
             last_name,
+            organization_id,
             email,
             password_hash
         };
@@ -93,13 +104,15 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             userid: user.id,
             first_name: user.first_name,
             last_name: user.last_name,
+            organization_id: user.organization_id,
             email: user.email,
             role_id: user.role_id
-        }, ACCESS_TOKEN_SECRET, { expiresIn: "5s" });
+        }, ACCESS_TOKEN_SECRET, { expiresIn: "10min" });
         const refreshToken = jsonwebtoken_1.default.sign({
             userid: user.id,
             first_name: user.first_name,
             last_name: user.last_name,
+            organization_id: user.organization_id,
             email: user.email,
             role_id: user.role_id
         }, REFRESH_TOKEN_SECRET, { expiresIn: "3d" });
@@ -107,14 +120,14 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.cookie("token", accessToken, {
             httpOnly: true,
             //secure:
-            maxAge: 5 * 1000, //5 seconds
+            maxAge: 10 * 60 * 1000, //10 mins
         });
         res.cookie("refresh", refreshToken, {
             httpOnly: true,
             //secure:
             maxAge: 3 * 24 * 60 * 60 * 1000 //3 days
         });
-        const accessTokenExpiresAt = new Date(Date.now() + 60 * 1000); // 60 seconds
+        const accessTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
         const refreshTokenExpiresAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000); // 3 days
         yield tokenModel_1.default.upsertToken(user.id, accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt);
         const { password_hash: _ } = user, userWithoutPasword = __rest(user, ["password_hash"]); //destructure to remove the pasword from the response
@@ -171,4 +184,4 @@ const updateEmployeeRole = (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
 });
-exports.default = { getAllUsersNames, registerUser, loginUser, logoutUser, authUser, updateEmployeeRole };
+exports.default = { getAllUsersNames, getOrganizationId, registerUser, loginUser, logoutUser, authUser, updateEmployeeRole };

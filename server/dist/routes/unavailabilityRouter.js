@@ -8,7 +8,7 @@ const unavailabilityController_1 = __importDefault(require("../controllers/unava
 const verifyToken_1 = __importDefault(require("../middlewares/verifyToken"));
 const verifyAPIkey_1 = __importDefault(require("../middlewares/verifyAPIkey"));
 const router = express_1.default.Router();
-router.get('/unavailability/all', verifyAPIkey_1.default, unavailabilityController_1.default.getAllUnavailableShifts);
+router.get('/unavailability/all', verifyAPIkey_1.default, verifyToken_1.default, unavailabilityController_1.default.getAllUnavailableShifts);
 router.get('/unavailability', verifyToken_1.default, unavailabilityController_1.default.getUnavailableShifts);
 router.post('/unavailability', verifyToken_1.default, unavailabilityController_1.default.submitUnavailableShifts);
 exports.default = router;

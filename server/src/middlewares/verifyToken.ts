@@ -4,6 +4,8 @@ import { Request, Response, NextFunction } from 'express';
 import {JwtPayload as CustomJwtPayload} from '../types/JwtPayload';
 import tokenController from '../controllers/tokenController';
 import { CustomRequest } from '../types/customRequest';
+import asyncLocalStorage from '../context/asyncLocalStorage';
+
 
 
 dotenv.config();
@@ -62,18 +64,32 @@ const verifyToken = async (req:CustomRequest,res:Response,next:NextFunction) =>{
         }
         else{
             if(typeof decode === 'object' && decode!=null){
-                const {userid,first_name,last_name,email,role_id} = decode as JwtPayload;
+                const {userid,first_name,last_name,organization_id,email,role_id} = decode as JwtPayload;
+
+                // Ensure organization_id is defined and is a number
+                if (typeof organization_id !== 'number') {
+                    return res.status(400).json({ message: 'Invalid or missing organization_id' });
+                }
+
+
                 req.userid = userid;
                 req.first_name = first_name;
                 req.last_name = last_name;
+                req.organization_id = organization_id;
                 req.email = email;
                 req.role_id = role_id;
                 req.token = accessToken;
 
                 console.log("Decoded User ID:", req.userid);  // Log User ID
 
+                // Use asyncLocalStorage to store the organization_id for the duration of the request
+                asyncLocalStorage.run({organization_id:req.organization_id},()=>{
+                next(); //Token is verified, move forward
+            })
             }
-            next(); //Token is verified, move forward
+            else {
+                return res.status(403).json({ message: 'Forbidden, invalid token structure' });
+            }
         }     
         });
     }catch(error){

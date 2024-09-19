@@ -6,7 +6,7 @@ import { login } from "../store/slices/authSlice";
 import { Role } from "../utils/roleUtils";
 import apiClient from "../apiClient";
 
-const roleMapping:any = {
+const roleMapping: any = {
   1: Role.Admin,
   2: Role.Manager,
   3: Role.Worker,
@@ -16,6 +16,7 @@ const roleMapping:any = {
 export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
   const [first_name, setFirst_name] = useState<string>("");
   const [last_name, setLast_name] = useState<string>("");
+  const [organization_id, setOrganization_id] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -26,11 +27,12 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
   const handleLoginRegister = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const endpoint = title === "Login" ? "/api/user/login" : "/api/user/register";
+    const endpoint =
+      title === "Login" ? "/api/user/login" : "/api/user/register";
     const requestData =
       title === "Login"
         ? { email, password }
-        : { first_name, last_name, email, password };
+        : { first_name, last_name, organization_id, email, password };
 
     try {
       const response = await apiClient.post(endpoint, requestData);
@@ -43,8 +45,14 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
         console.log(title);
 
         if (title === "Login") {
-          const role = roleMapping[response.data.role_id]; // Map role_id to Role
-          dispatch(login({ email: response.data.email, role: role }));
+          const role = roleMapping[response.data.user.role_id]; // Map role_id to Role
+          dispatch(
+            login({
+              token: response.data.accessToken,
+              email: response.data.user.email,
+              role: role,
+            })
+          );
           navigate("/dashboard");
         } else {
           navigate("/login");
@@ -75,6 +83,12 @@ export const LoginRegister: React.FC<LoginRegisterProps> = ({ title }) => {
               id="lastName"
               placeholder="Last Name"
               onChange={(e) => setLast_name(e.target.value)}
+            />
+            <input
+              type="number"
+              id="organizationId"
+              placeholder="Organization Id"
+              onChange={(e) => setOrganization_id(Number(e.target.value))}
             />
           </>
         )}

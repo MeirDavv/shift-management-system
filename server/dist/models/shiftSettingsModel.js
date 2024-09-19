@@ -8,13 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../config/db");
+const asyncLocalStorage_1 = __importDefault(require("../context/asyncLocalStorage"));
 const TABLE_NAME = 'shifts';
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const store = asyncLocalStorage_1.default.getStore();
+        if (!store || !store.organization_id) {
+            throw new Error("organization_id is missing");
+        }
         const shiftSettings = yield (0, db_1.db)(TABLE_NAME)
             .select("id", "name", "start_time", "end_time", "min_employee_count", "max_employee_count")
+            .where({ organization_id: store.organization_id })
             .orderBy("id");
         return shiftSettings;
     }

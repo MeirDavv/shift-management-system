@@ -1,10 +1,12 @@
 import { Request,Response } from "express";
 import { shiftSettings } from "../types/ShiftSettings";
 import shiftSettingsModel from "../models/shiftSettingsModel";
+import { CustomRequest } from '../types/customRequest';
 
 
 
-const getAllShiftSettings = async (req:Request,res:Response): Promise<void> => {
+
+const getAllShiftSettings = async (req:CustomRequest,res:Response): Promise<void> => {
     try{
         const shiftSettings : shiftSettings[] | null = await shiftSettingsModel.getAll(); 
         res.status(200).json(shiftSettings);

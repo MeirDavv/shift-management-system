@@ -1,7 +1,6 @@
 import express, { Request,Response } from "express";
 import employeeController from "../controllers/employeeController";
 import verifyToken from "../middlewares/verifyToken";
-import authorizeRole from "@/middlewares/authorizeRole";
 
 
 
@@ -14,6 +13,7 @@ router.get("/user/logout", verifyToken, employeeController.logoutUser);
 
 router.get("/user/auth", verifyToken, employeeController.authUser);
 router.get("/user/all/names", verifyToken, employeeController.getAllUsersNames);
+router.get("/user/organization", verifyToken, employeeController.getOrganizationId)
 
 router.put('/user/:employeeId/role',employeeController.updateEmployeeRole)
 

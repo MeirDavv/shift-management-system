@@ -7,7 +7,9 @@ import apiClient from '../../apiClient';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchShiftSettings = createAsyncThunk('shiftSetings/fetchShiftSettings', async () => {
+export const fetchShiftSettings = createAsyncThunk(
+    'shiftSetings/fetchShiftSettings', 
+    async () => {
     try{
         const endpoint = '/api/shiftSettings/all';
         const response = await apiClient.get<shiftSettings[]>(endpoint);
